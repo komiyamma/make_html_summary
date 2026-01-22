@@ -1,0 +1,107 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>HmGoogleGeminiWeb を外部マクロから呼び出す</h2>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>
+        質問内容について、外部マクロから呼び出すことで、定型的にAIを利用するマクロを組むことが出来ます。
+    </p>
+</div>
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>以下のマクロファイルを作成し、HmGoogleGeminiWeb.mac と同じフォルダに入れてください。</h3>
+    <fieldset class="code">
+        <legend>test1.mac</legend>
+        <p></p>
+        <pre class="brush:js;highlight:[1,4,5,8]">jsmode @"WebView2\HmGoogleGeminiWeb";
+js {
+
+function onRequestQuestionText() {
+    return "1+1は？";
+}
+
+hidemaru.postExecMacroFile( currentmacrodirectory() + "\\HmGoogleGeminiWeb.mac" );
+
+} // js
+</pre>
+    </fieldset>
+    <p><img src="./other_soft/hm_google_gemini_web/cnt_hm_google_gemini_web_03.png"></p>
+    <h4>jsmode は "WebView2\HmGoogleGeminiWeb"</h4>
+    <p>HmGoogleGeminiWebと同じ実行空間で走らせます。</p>
+    <h4>onRequestQuestionText() という関数を定義し、質問内容を返す</h4>
+    <p>onRequestQuestionText() を定義して、最終的に質問内容を返すと、<br>
+    そのままGoogle Geminiへの問い合わせ内容となります。</p>
+    <h4>HmGoogleGeminiWebへと処理を移す</h4>
+    <blockquote>currentmacrodirectory() + "\\HmGoogleGeminiWeb.mac"</blockquote>
+    <p>
+        の「<mark>フルパス指定の部分を適切に修正</mark>」出来るなら、<br>
+        「test1.mac」と「HmGoogleGeminiWeb.mac」を<mark>同じフォルダに配置する必要はありません</mark>。
+    </p>
+</div>
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>メニューから選ぶなど色々と応用がきく</h3>
+    <fieldset class="code">
+        <legend>test2.mac</legend>
+        <pre class="brush:js">jsmode @"WebView2\HmGoogleGeminiWeb";
+
+js {
+
+function onRequestQuestionText() {
+
+    const list = ["城", "みかん", "りんご"];
+
+    const selectID = menuarray(list);
+
+    // 何か選択した
+    if (selectID &gt; 0) {
+        const selectIX = selectID-1; // １始まり→０始まり
+        const item = list[selectIX];
+
+        return item + "の絵を描いてください。";
+    }
+}
+
+hidemaru.postExecMacroFile( currentmacrodirectory() + "\\HmGoogleGeminiWeb.mac" );
+
+} // js
+</pre>
+    </fieldset>
+    <p><img src="./other_soft/hm_google_gemini_web/cnt_hm_google_gemini_web_10.png"></p>
+</div>
+
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>「質問内容」を「マクロの引数」として渡せるように出来ますか？</h3>
+    <p>将来の互換性のため、HmGoogleGeminiWeb.mac 本体には、そのような機能を持たせていません。</p>
+    <p>以下のような「間をとりもつマクロ」を作成し、<mark>HmGoogleGeminiWeb.mac と同じフォルダに配置する</mark>と良いでしょう。</p>
+    <h4>HmGoogleGeminiWebArg.macの作成</h4>
+    <fieldset class="code">
+        <legend>HmGoogleGeminiWebArg.mac (<mark>HmGoogleGeminiWeb.macと同じフォルダ</mark>に配置)</legend>
+        <pre class="brush:js">jsmode @"WebView2\HmGoogleGeminiWeb";
+js {
+
+var _myQuestionTextCache = getarg(0);
+
+function onRequestQuestionText() {
+    return _myQuestionTextCache;
+}
+
+hidemaru.postExecMacroFile( currentmacrodirectory() + "\\HmGoogleGeminiWeb.mac" );
+
+} // js
+</pre>
+    </fieldset>
+
+    <h4>外部マクロからは、この「HmGoogleGeminiWebArg.mac」を呼び出すようにする</h4>
+    <fieldset class="code">
+        <legend>test4.mac</legend>
+        <pre class="brush:js">execmacro currentmacrodirectory + "\\HmGoogleGeminiWebArg.mac", "りんごとミカンをかけ合わせた新しい果物のような画像をよろしく！";
+</pre>
+    </fieldset>
+    <p><img src="./other_soft/hm_google_gemini_web/cnt_hm_google_gemini_web_05.png"></p>
+</div>

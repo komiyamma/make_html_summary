@@ -1,0 +1,69 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>入門編 ～更新や具体的操作があるかのチェック～ (秀丸エディタ 9.12以降)</h2>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>監視・常駐型のプログラムを作る際に、「秀丸上で何も更新や具体的な操作がないならば、何もする必要がない」といった<br>
+        プログラムを作ることは十分ありえるシチュエーションです。</p>
+    <p>
+        このような目的のため、Hm.Edit.UpdateCount が利用できます。<br>
+        これは秀丸マクロ変数の「updatecount」相当のものとなります。</p>
+
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        更新や具体的操作があるかの判断材料となる updatecount 相当の値を取得する
+    </h3>
+    <p>マクロ中でもマクロ中以外でも、常時取得することが出来ます。</p>
+    <blockquote>int Hm.Edit.UpdateCount</blockquote>
+    <ul class="pointlist">
+        <li>
+            <h4>C#側のソース</h4>
+            <fieldset class="code">
+                <legend>MyTestForm.cs</legend>
+                <pre class="brush:csharp">using System;
+using System.Windows.Forms;
+using Hidemaru;
+
+namespace HmTest
+{
+    partial class HmTestForm
+    {
+        protected void MethodCreate()
+        {
+            System.Diagnostics.Trace.WriteLine("フォーム生成時");
+        }
+
+        protected void MethodTick()
+        {
+            System.Diagnostics.Trace.WriteLine("チック時");
+            try
+            {
+                // このプロパティは秀丸9.12以降なので、それ以前のバージョンだと例外が返ってくる
+                var updateCount = Hm.Edit.UpdateCount;
+                Hm.OutputPane.Output($"{updateCount}");
+            } catch(Exception ex)
+            {
+                Hm.OutputPane.Output(ex.ToString());
+            }
+        }
+        protected void MethodDestroy()
+        {
+            System.Diagnostics.Trace.WriteLine("フォームクローズ時");
+        }
+    }
+
+}
+</pre>
+            </fieldset>
+
+        </li><li>
+            <h4>秀丸マクロ側のソース</h4>
+            <p>
+                テキストを編集してみたり、メニュー上の操作をしてみたり、<br>
+                操作をやめてマウスだけ動かしてみたりして、<br>
+                updatecount がどのように更新されていくのか確認してみてください。
+            </p>
+    </li></ul>
+</div>

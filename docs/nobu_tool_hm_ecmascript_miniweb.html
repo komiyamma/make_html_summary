@@ -1,0 +1,74 @@
+<div class="content-box mb-3 content-lighten">
+<h2><i class="fa fa-book fa-fw"></i>「hmV8」の例 ミニブラウザ</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>.NETにおいては、「http://」URLをプロセスとして実行すると、<br>
+    Webに通常関連付けられているブラウザが起動しますが、<br>
+    対象のWebページが「Webアプリ的なも」や「社内のhtmlページ的なもの」など定型・定型アプリであるとわかっているならば、<br>
+    フル機能を持つWebブラウザではなく、Webコンポーネントを利用するのもアリでしょう。
+    </p>
+    <img class="content-img" src="./other_soft/hm_ironpython/cnt_hm_ironpython_miniweb.png" attr="noedge">
+    <p>以下のものを「miniweb.mac」として保存してみましょう。</p>
+    <div class="code"><pre class="brush:hmmacro">$url = "http://www.google.com";
+
+#JS = loaddll( hidemarudir + @"\hmV8.dll" );
+
+#_ = dllfuncw(#JS, "DoString", R"JS(
+
+let LibForms = host.lib("System.Windows.Forms");
+let LibDrawing = host.lib("System.Drawing");
+
+class MyWebForm {
+    constructor() {
+        this.form = new LibForms.System.Windows.Forms.Form();
+        this.form.Width = 800;
+        this.form.Height = 600;
+
+        let url = hm.Macro.Var["$url"];
+        this.wb = new LibForms.System.Windows.Forms.WebBrowser();
+        this.wb.Navigate(url);
+        this.wb.Navigated.connect( (sender, e) =&gt; this.WbNavigated(sender, e) );
+
+        this.tb = new LibForms.System.Windows.Forms.TextBox();
+        this.tb.Text = url;
+        this.tb.KeyPress.connect( (sender, e) =&gt; this.TbKeyPress(sender, e) );
+
+        // レイアウト
+        this.tb.Dock = LibForms.System.Windows.Forms.DockStyle.Top;
+        this.wb.Dock = LibForms.System.Windows.Forms.DockStyle.Fill;
+
+        // フォームに配置
+        this.form.Controls.Add(this.wb);
+        this.form.Controls.Add(this.tb);
+    }
+
+    TbKeyPress(sender, e) {
+        hm.debuginfo(e.KeyChar);
+        hm.debuginfo(LibForms.System.Windows.Forms.Keys.Enter.KeyCode);
+        if (e.KeyChar == "\r".charCodeAt(0) ) { // リターンキー
+            this.wb.Navigate(this.tb.Text);
+        }
+    }
+
+    WbNavigated(sender, e) {
+        this.tb.Text = e.Url.ToString();
+    }
+
+
+    ShowDialog() {
+        this.form.ShowDialog();
+    }
+
+}
+
+let form = new MyWebForm();
+form.ShowDialog();
+
+)JS"
+);
+
+// 解放
+freedll(#JS);
+</pre></div>
+</div>

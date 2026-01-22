@@ -1,0 +1,59 @@
+<div class="content-box mb-3 content-lighten">
+<h2><i class="fa fa-book fa-fw"></i>require関数</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>CommonJS系に沿う形のrequire関数</h3>
+        <p>
+            ECMAScript系の汎用モジュールは、<br>
+            「require関数で呼ばれる」ということを意識した作りのものが多くなっています。
+        </p>
+        <p>
+            そこで、本来は、v8エンジンには、require関数は存在しませんが、<br>
+            特別な対処として、hmV8にはnodejsの実装に近い形でのrequire関数が実装されています。
+        </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>hmV8のrequire関数の特徴</h3>
+        <ul class="pointlist">
+            <li>
+                <h4>require("abc.js") あるいは require("abdir/abc.js") あるいは require("/abc.js")</h4>
+                <p>
+                    requireの対象が、ファイル名やディレクトリ名もしくは「/」から始めた場合、<br>
+                    基点ディレクトリとなるのは「今実行中マクロ(.mac)のディレクトリ」です。
+                </p>
+            </li><li>
+                <h4>require("./abc.js") あるいは require("../abdir/abc.js")</h4>
+                <p>
+                    requireの対象が、「./」や「../」から始まる場合は、<br>
+                    基点ディレクトリとなるのは「hmV8.dllが存在するディレクトリ(通常は秀丸本体のディレクトリ)」です。
+                </p>
+            </li><li>
+                <h4>変数などを使って絶対パス</h4>
+                <p>
+                    require( hm.Macro.Var["macrodir"] + "/" + "a.js")<br>
+                    などとすると、「秀丸のマクロ用ディレクトリ(設定してない場合、秀丸本体のディレクトリ)」、<br>
+                    <br>
+                    require( hm.Macro.Var["currentmacrodirectory"] + "/" + "a.js")<br>
+                    などとすると、「秀丸実行中のマクロのディレクトリ、<br>
+                    <br>
+                    というような「フルパス相当の文字列」で呼び出すことも出来ます。<br>
+                </p>
+            </li><li>
+                <h4>絶対パスの文字列リテラル</h4>
+                <p>
+                    もちろんこのような変数を使わず、<br>
+                    require( "C:/mydir/ccc.js" ) や require( "C:\\mydir\\ccc.js" )<br>
+                    といった完全に文字列リテラルでフルパスを直接記述することも可能です。
+                </p>
+</li></ul>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>jsonも読み込める</h3>
+        <p>node.jsのrequire関数が、jsonファイルを読み込むことが出来る(<span class="positive">jsonの内容に従ったJavaScriptのオブジェクトになる</span>)のと同様に、<br>
+        hmV8のrequire関数も、jsonファイルを読み込むことが可能です。</p>
+        <div class="code">
+            <pre class="brush:js">let data = require("aaa.json");
+console.log(data);
+</pre>
+        </div>
+</div>
