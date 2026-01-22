@@ -1,0 +1,67 @@
+<div class="content-box mb-3 content-lighten">
+  <h2><i class="fa fa-book fa-fw"></i>PCのCPUが備えるスレッドの数の目安</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+  <h3>概要</h3>
+  <p>ハードウェアの強さに基づいて処理の負荷を変更する必要が出ることもあることでしょう。<br>
+  例えばCPUのスレッド数に応じて、プログラムで生成するスレッド数を調整するなどです。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+  <h3>
+    可変長引数
+  </h3>
+  <ul class="pointlist">
+    <li>
+      <h4>C++側のソース</h4>
+      <fieldset class="code">
+        <legend>CPUCheck.dllとしてコンパイル</legend>
+        <pre class="brush:cpp;">#include &lt;windows.h&gt;
+#include &lt;string&gt;
+#include &lt;thread&gt;
+
+#include "HmCppInvoke.h"
+
+using namespace Hidemaru;
+using namespace std;
+
+
+
+extern "C" __declspec(dllexport) THmNumber test() {
+    Hm.funcDllExport();
+
+    auto thread_num = std::thread::hardware_concurrency();
+    try {
+        Hm.Macro.doStatement(L"message", L"使えるスレッド数の目安は「" + to_wstring(thread_num) + L"」個です");
+    }
+    catch (exception&amp; e) {
+        // エラー内容をchar → wstring へ
+        auto wide_what = Text::Encoding::cp932_to_utf16( e.what() );
+        Hm.OutputPane.output(wide_what + L"\r\n");
+    }
+
+
+    return 1;
+}
+</pre>
+      </fieldset>
+    </li>
+    <li>
+      <h4>秀丸マクロ側のソース</h4>
+      <fieldset class="code">
+        <legend>test.mac</legend>
+        <pre class="brush:hmmacro">// CPUCheck.dllとしてコンパイルした
+#dll = loaddll(currentmacrodirectory + @"\CPUCheckCheck.dll");
+ 
+// 途中でマクロの文法や型の致命的エラーが発生した場合でもdllを解放する。
+if (version &gt;= 898) { eval "keepdll #dll, 0"; }
+ 
+#r = dllfuncw(#dll, "test");
+ 
+freedll(#dll);
+
+</pre>
+      </fieldset>
+    </li>
+
+  </ul>
+</div>

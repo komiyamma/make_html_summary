@@ -1,0 +1,33 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>ファイルマネージャ枠のモードの設定</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>ファイルマネージャ枠のモードを設定し、表示を切り替えます。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+  <h3>
+    ファイルマネージャ枠のモードを設定
+  </h3>
+  <p>非同期のメソッド中も含め、常時設定することが出来ます。</p>
+  <blockquote>int success = Hm.ExplorerPane.SetMode(int mode)</blockquote>
+  <ul class="pointlist">
+      <li>
+          <h4>C#側のソース</h4>
+          <fieldset class="code">
+              <legend>MyTest.cs</legend>
+              <pre class="brush:csharp">using System;
+using Hidemaru;
+
+...
+  int success = Hm.ExplorerPane.SetMode(2);
+  if (success == 0) {
+    // 設定に失敗
+  } else {
+    // 設定に成功
+  }
+</pre>
+          </fieldset>
+      </li>
+  </ul>
+</div>

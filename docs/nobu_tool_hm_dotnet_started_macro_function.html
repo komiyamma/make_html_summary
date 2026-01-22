@@ -1,0 +1,214 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>入門編 ～秀丸マクロを「関数」を文字列で実行～</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p><mark>この機能を利用する場合、秀丸エディタ v8.98 (正式版 or β9以上)を強く推奨します。<br>
+    そうでない場合、数値と文字列の型を間違えて実行すると秀丸が不正な状態となります。</mark></p>
+    <p>
+        Hm.Macro.Eval(...)を「関数向けに特化」したものとして、「Hm.Macro.Function」が用意されています。
+    </p>
+    <p>秀丸マクロにおいて「関数」とは</p>
+    <blockquote>$ret = sprintf(....);</blockquote>
+    <p>のように呼び出しに<mark>「( )」を利用し、返り値を受け取る形</mark>になっているものです。</p>
+    <p>一方、<a href="?page=nobu_tool_hm_dotnet_started_macro_statement">類似ですが関数のようでいて「返り値」がなく、「( )」もないものは秀丸マクロでは「文」もしくは「命令文」</a>としています。<br>
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        秀丸マクロの関数を実行可能です。<br>
+    </h3>
+    <p><mark>マクロ実行中のみ実行可能</mark></p>
+    <blockquote>Hm.Macro.Function("秀丸マクロの関数名", ...引数);</blockquote>
+    <ul class="pointlist">
+        <li>
+            <h4>C#側のソース</h4>
+            <fieldset class="code">
+                <legend>MyTestForm.cs</legend>
+                <pre class="brush:csharp">using System;
+using System.Windows.Forms;
+using Hidemaru;
+
+namespace HmTest
+{
+    partial class HmTestForm
+    {
+        protected void MethodCreate()
+        {
+            System.Diagnostics.Trace.WriteLine("フォーム生成時");
+
+            var ret = Hm.Macro.Function("sprintf", "%03d", 555); // 秀丸マクロ関数の「sprintf」を呼び出してみる例。
+            if (ret.Error == null)
+            {
+                string retValue = (String)ret.Result; // Result には「関数(今回の場合sprintf)の返り値」が入っている。
+                var updatedArgs = ret.Args; // Argsには引数("%03d", 555)の関数実行後の値がList&lt;Object&gt;の形で格納されている。
+                                            // この機能は秀丸マクロの「getlinecount」など引数の値自体を書き換える関数のためにある。
+            }
+            else
+            {
+                Hm.OutputPane.Output("実行失敗\r\n");
+            }
+        }
+        protected void MethodTick()
+        {
+            System.Diagnostics.Trace.WriteLine("チック時");
+        }
+        protected void MethodDestroy()
+        {
+            System.Diagnostics.Trace.WriteLine("フォームクローズ時");
+        }
+    }
+
+}
+
+</pre>
+            </fieldset>
+</li></ul></div>
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>秀丸マクロ側のソース</h3>
+    <p>
+        前章の「HmNETTest.mac」と同一です。<br>
+    </p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        引数が書き換わる関数
+    </h3>
+    <p>C#の型に対する支援を期待するのなら、そのままHm.Macro.Function...と利用するよりも、<br>
+        ラップするのがおすすめです。<br>
+        また、秀丸マクロの関数にはごく一部、返り値のみならず、<mark>引数に渡している変数自体に値が入ってくる</mark>ものもあります。<br>
+        例えば<mark>getlinecount (秀丸v8.94以降)</mark>や<mark>enumregvalue (秀丸v9.00以降)</mark>などが該当します。<br>
+        こういったものも取得できるようになっています。</p>
+    <p>今回は「<a href="https://help.maruo.co.jp/hidemac/html/070_Function_getlinecount.html">秀丸マクロ関数のgetlinecount</a>」をラップしてみましょう。</p>
+    <ul class="pointlist">
+        <li>
+            <h4>C#側のソース</h4>
+            <fieldset class="code">
+                <legend>MyTestForm.cs</legend>
+                <pre class="brush:csharp">using System;
+using System.Windows.Forms;
+using Hidemaru;
+
+namespace HmTest
+{
+partial class HmTestForm
+{
+    protected void MethodCreate()
+    {
+        System.Diagnostics.Trace.WriteLine("フォーム生成時");
+
+        (int lineno , int column) = getlinecount( "ABCD\nXYZ", 7 );
+        Hm.OutputPane.Output($"{column}, {lineno}\r\n");
+    }
+
+    private static (int lineno, int column) getlinecount(string text, int index)
+    {
+        int dummyColumn = 0;
+        var ret = Hm.Macro.Function("getlinecount", text, index, dummyColumn);
+        if (ret.Error != null)
+        {
+            throw ret.Error;
+        }
+
+        int lineno = (int)(dynamic)ret.Result;  // 64bit⇒32bitなどでキャストエラーを起こさないようにdynamicを間にはさむ
+        int column = (int)(dynamic)ret.Args[2]; // 関数に渡した引数が、関数の実行後どうなったのかList&lt;Object&gt;の形で格納されている。
+                                                 // 引数の３番目 dummyColumn に対応する引数Argsの３番目 (=0オジリンで2) に対応するマクロ変数の書き換えられた値が格納されている。
+        return (lineno, column);
+    }
+
+    protected void MethodTick()
+    {
+        System.Diagnostics.Trace.WriteLine("チック時");
+    }
+    protected void MethodDestroy()
+    {
+        System.Diagnostics.Trace.WriteLine("フォームクローズ時");
+    }
+}
+
+}
+
+</pre>
+            </fieldset>
+    </li></ul>
+</div>
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>秀丸マクロ側のソース</h3>
+    <p>
+        前章の「HmNETTest.mac」と同一です。<br>
+    </p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>Hm.Macro.Function(...) の返り値</h3>
+    <ul class="arrowlist">
+        <ul class="arrowlist">
+            <li>
+                <h5>Resultプロパティ</h5>
+                <p>
+                    実行した秀丸マク関数の返り値がObject型で入っています。<br>
+                    取得するには(string)もしくは(dynamic)にキャストした後、(int)や(long)でのキャストが必要です。
+                </p>
+            </li><li>
+                <h5>Argsプロパティ</h5>
+                <p>
+                    秀丸マク関数を実行した後、秀丸マクロ関数に渡した引数が最終的にどういった値になったかを取得できます。<br>
+                    List&lt;Object&gt;型で、関数に渡した最初の引数が[0], 次の引数が[1], ... といった形で格納されています。
+                    各種リスト要素はObject型になっていますので、取得するには(string)もしくは(dynamic)にキャストした後、(int)や(long)でのキャストが必要です。
+                </p>
+            </li><li>
+                <h5>Errorプロパティ</h5>
+                <p>
+                    何か明確な例外が発生した場合はErrorプロパティにException型の例外インスタンスが入っています。<br>
+                </p>
+            </li><li>
+                <h5>Messageプロパティ</h5>
+                <p>
+                    基本的には特になにもはいっておらず、空文字が入っています。<br>
+                </p>
+
+        </li></ul>
+</ul></div>
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        関数の返り値の型に対してヒントを与える<br>
+    </h3>
+    <p>秀丸マクロの関数にはCOMなどで利用する「member関数」や、<br>
+        秀丸の設定値を取得する「getconfig関数」など、<br>
+        ごく一部「<mark>関数だけではその返り値が数値なのか文字列なのか区別が付かないもの</mark>があります。<br></p>
+        <ul>
+            <li>getconfig
+            </li><li>getresultex
+            </li><li>geteventparam
+            </li><li>member
+        </li></ul>
+        <p>
+    Hm.Macro.Functionだけだと、そのような「関数の返り値の型が数値なのか文字列なのかが不定」なものを実行した場合、返り値が正しい状態にならないことがあります。<br>
+    そこで、「Hm.Macro.Function&lt;String&gt;」やHm.Macro.Function&lt;IntPtr&gt;などを利用して、<br>
+    返り値の型のヒントを秀丸マクロに与えつつ実行することが出来るようになっています。</p>
+    <blockquote>Hm.Macro.Function&lt;T&gt;("秀丸マクロの関数名", ...引数);</blockquote>
+    <ul class="pointlist">
+        <li>
+            <h4>C#側のソース</h4>
+            <fieldset class="code">
+                <legend>MyTestForm.cs</legend>
+                <pre class="brush:csharp">    int comID = (int)(dynamic)Hm.Macro.Var["#COM_ID"]; // どこかでCOM呼び出しなど実行しているものとする。
+    var ret = Hm.Macro.Function&lt;IntPtr&gt;("member", comID, "myfunc", 555); // 秀丸マクロのmember関数だけだと返り値の型が不明であるため、返り値の型が数値系だというヒントを与える。
+    if (ret.Error == null)
+    {
+        IntPtr retValue = (IntPtr)(dynamic)ret.Result; // Result には「memberの返り値」がObject型で入っている。
+    }
+    else
+    {
+        Hm.OutputPane.Output("実行失敗\r\n");
+    }
+</pre>
+            </fieldset>
+</li></ul></div>

@@ -1,0 +1,45 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>Hm.Macro.Flags</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>
+        一般的なキーワードではなく、</p>
+    <blockquote>「特定の文の引数としてのみ」あるいは「特定の関数の引数としてのみ」使用可能なキーワード</blockquote>
+    <p>は Hm.Macro.Var["***"] などでは引き出せません。<br></p>
+    <p>
+        そこでそういったキーワードを中心に、Hm.Macro.Flags以下に定義されています。<br>
+        (これらに当てはまるものは、検索オプション系のキーワードと文字エンコードが大半です)
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        Hm.MacroFlags.***.***
+    </h3>
+    <blockquote>Hm.Macro.Flags.SearchOption.***</blockquote>
+    <blockquote>Hm.Macro.Flags.SearchOption2.***</blockquote>
+    <blockquote>Hm.Macro.Flags.Encode.***</blockquote>
+    <ul class="pointlist">
+        <li>
+            <h4>C#側のソース</h4>
+            <fieldset class="code">
+                <legend>Flagsの使い方の例</legend>
+                <pre class="brush:csharp">namespace ClassLibrary5
+{
+    using Flags = Hm.Macro.Flags;
+    public class Class1
+    {
+        public int abc()
+        {
+            Hm.Macro.Statement("grep", "一緒", "*.mac", @"C:\aaa", Flags.SearchOption.Icon|Flags.SearchOption.FEnableSearchOption2, Flags.Encode.Utf16|Flags.Encode.Utf8|Flags.Encode.Bom, Flags.SearchOption2.FGrepFormColumn);
+
+            return 1;
+        }
+    }
+}
+
+</pre>
+            </fieldset>
+        </li>
+    </ul>
+</div>

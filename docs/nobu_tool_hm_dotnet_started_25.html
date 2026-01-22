@@ -1,0 +1,117 @@
+<div class="content-box mb-3 content-lighten">
+<h2><i class="fa fa-book fa-fw"></i>入門編 ～秀丸マクロを改めて実行（ファイル指定編）～</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>概要</h3>
+        <p>
+            hm.NETでは「秀丸マクロが実行されていない時、秀丸マクロを改めて実行する」ことが出来ます。<br></p>
+            <p>
+            マクロを実行していない時にのみ、実行可能なため、<br>
+            <mark>ほとんどのシチュエーションでは「async await Task.Run Thread Timer」といったものをキーワードとする<br>
+                「非同期のメソッド」にて使うこととなるでしょう。</mark>
+        </p>
+        <p>
+            <span class="positive">文字列を記述して直接実行</span>することもできますし、<br>
+            <span class="positive">ファイルを指定して実行</span>することもできます。<br>
+        </p>
+        <p>ここでは、ファイルを指定して実行する方法を示します。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>
+            秀丸マクロを改めて実行
+        </h3>
+        <p><mark>マクロを実行していない時にのみ、実行することが出来ます。</mark></p>
+        <blockquote>Hm.Macro.Exec.File("マクロファイルのフルパス")</blockquote>
+        <ul class="pointlist">
+            <li>
+                <h4>C#側のソース</h4>
+                <fieldset class="code">
+                    <legend>MyTestForm.cs</legend><pre class="brush:csharp">using System;
+using System.Windows.Forms;
+using Hidemaru;
+
+namespace HmTest
+{
+    partial class HmTestForm
+    {
+        protected void MethodCreate()
+        {
+            System.Diagnostics.Trace.WriteLine("フォーム生成時");
+        }
+
+        protected void MethodTick()
+        {
+            // このdllがあるディレクトリ
+            string asmLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string dir = System.IO.Path.GetDirectoryName(asmLocation);
+
+            // マクロを実行していない時
+            if (!Hm.Macro.IsExecuting) {
+                // 「SubTest.mac」を実行
+                var result = Hm.Macro.Exec.File(dir + "/" + "SubTest.mac");
+
+                if (result.Message == "最後まで実行出来た")
+                {
+                    System.Diagnostics.Trace.WriteLine("実行成功");
+                } else
+                {
+                    System.Diagnostics.Trace.WriteLine("実行失敗");
+                }
+            }
+            System.Diagnostics.Trace.WriteLine("チック時");
+        }
+        protected void MethodDestroy()
+        {
+            System.Diagnostics.Trace.WriteLine("フォームクローズ時");
+        }
+    }
+
+}
+</pre>
+                </fieldset>
+                <ul class="arrowlist">
+                    <li>
+                        <h5>endmacro の後ろの文字列</h5>
+                        <p>
+                            「秀丸マクロ内の <span class="positive">endmacro の後ろの文字列</span> が肝となります。<br>
+                        </p>
+                    </li><li>
+                        <h5>Messageプロパティ</h5>
+                        <p>
+                            endmacroまで実行できたならば、<span class="positive">Messageプロパティ</span>にその値が入っていることでしょう。<br>
+                        </p>
+                    </li><li>
+                        <h5>Errorプロパティ</h5>
+                        <p>
+                            何か明確な例外が発生した場合はErrorプロパティに例外を捕捉出来ることもありますが、<br>
+                            情報としての確実性に欠けます。<br>
+                            原則的には、「endmacroの後ろの文字列」でどこまで実行できたのかを、把握するのが適切です。
+                        </p>
+                    </li><li>
+                        <h5>Resultプロパティ</h5>
+                        <p>
+                            実行の状態によって返ってくる値が異なります、参考程度の値であり、あまりこの値に基づいたプログラムを記述するべきではありません。
+                        </p>
+                </li></ul>
+            </li><li>
+                <h4>C#から実行される秀丸マクロ側のソース</h4>
+
+                <fieldset class="code">
+                    <legend>C#のソース中に従う。今回の例では、SubTest.macというファイル名</legend><pre class="brush:hmmacro">debuginfo 2;
+debuginfo "test test\n";
+
+endmacro "最後まで実行出来た";
+</pre>
+                </fieldset>
+                <p>
+                    通常の秀丸マクロと同じですが、endmacroの最後に文字列を引数としておくことで、<br>
+                    該当のendmacroまで実行した時に、その文字列を取得することが出来ます。
+                </p>
+            </li><li>
+                <h4>秀丸マクロ側のソース</h4>
+                <p>
+                    前章の「HmNETTest.mac」と同一です。<br>
+                    一度マクロを実行し、「デバッグモニター」にどのように順次表示されるか確認しましょう。
+                </p>
+        </li></ul>
+</div>

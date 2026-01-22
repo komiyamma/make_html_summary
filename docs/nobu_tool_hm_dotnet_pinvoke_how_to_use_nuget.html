@@ -1,0 +1,75 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>Hm.NetCOMの使い方 (nuget編)</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <p>基本的には、nuget経由で取得してくることを推奨します。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>.NET 4.x Frameworkの場合</h3>
+    <p>Nuget から取得してくるだけで、T4 Template による変換も実行されます。<br>
+        これだけで、使える状態になります。</p>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/cnt_hm_dotnet_pinvoke_nuget_01.png"></p>
+</div>
+<a name="TextTemplatingFileGenerator"></a>
+<div class="content-box mb-3 content-lighten">
+    <h3>.NET 5.0 - .NET 9.0など .NET Core系の場合、TextTemplatingFileGeneratorの設定が必要</h3>
+    <p>Nuget から取得してくるだけでは、T4 Template は実行されません。<br>
+        プロジェクトへと加えられた HmNetCom.tt をクリックして、下図のように<br>
+        プロパティペインを見ます。<br>
+        </p><p><img src="./other_soft/hm_dotnet_pinvoke/cnt_hm_dotnet_pinvoke_nuget_02.png"></p>
+    <p></p>
+    <p>カスタムツール という項目があるので、ここに</p>
+    <blockquote><b>TextTemplatingFileGenerator</b></blockquote>
+    <p>と入力してます。<br>
+        入力が完了する(=プロパティペインの他の場所なりどこなりにマウスを移動させる)と、<br>
+        自動的にテンプレートの変換が行われ、以降使える状態となります。</p>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/cnt_hm_dotnet_pinvoke_nuget_05.png"></p>
+    <p><mark>自動的に変換が始まらない場合は、メニューのビルドより「すべてのT4テンプレートの変換」</mark>を実行してください。</p>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/hm_dotnet_pinvoke_01.png"></p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>TextTemplatingFileGenerator を入力していないのに<mark>最初からプロジェクトのトップにHm.NetCOM.cs</mark>がある場合</h3>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/cnt_hm_dotnet_pinvoke_nuget_03.png"></p>
+    <p>このようにプロジェクトのトップに「Hm.NetCOM.cs」があるのは間違った状態です。<br>
+        キャッシュが読み込まれてしまっている状態ですので、一度<span class="negative">プロジェクトトップの「Hm.NetCOM.cs」は削除</span>します。</p>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/cnt_hm_dotnet_pinvoke_nuget_04.png"></p>
+    <p>カスタムツール の項目に</p>
+    <blockquote><b>TextTemplatingFileGenerator</b></blockquote>
+    <p>を入力して完了(=プロパティペインの他の場所なりどこなりにマウスを移動させる)しましょう。</p>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/cnt_hm_dotnet_pinvoke_nuget_02.png"></p>
+    自動的にテンプレートの変換が行われ、以降使える状態となります。<p></p>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/cnt_hm_dotnet_pinvoke_nuget_05.png"></p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>プロジェクトが変われば、必ず「HmNetCom.tt」のT4テンプレートの変換が必要</h3>
+    <p>「HmNetCOM.cs」を生成する際に、<mark>「dllと１対１で紐付けるべきGUID」が生成され</mark>ます。<br>
+        <mark>このため、異なる.dllファイル(=新たなC#プロジェクト)に対して、HmNetCOMを利用する度に、<br>
+            この「すべてのT4テンプレートの変換」を実行</mark>してください。</p>
+    <p><span class="negative">「HmNetCOM.cs」を異なる.dllへと流用してはいけません。</span><br>
+        dllの実体が異なるのに、同じGUIDを持つ複数のクラスが生まれてしまうためです。</p>
+        <p>「HmNetCOM.tt」だけを別のプロジェクトにもっていって、流用するのはOKです。<br>
+    </p><blockquote>新しいC#プロジェクトの度に、「HmNetCOM.tt」から「すべてのT4テンプレートの変換」を改めて実行し、<br>
+        新たに生成された「HmNetCom.cs」を使用する。<br>
+        <br>
+        <mark>既に生成済みの「HmNetCOM.cs」を別プロジェクトにコピペしないこと。<br>
+            GUIDの競合が発生してしまいます。</mark></blockquote>
+    <p>を厳守してください。</p>
+    <p><img src="./other_soft/hm_dotnet_pinvoke/hm_dotnet_pinvoke_01.png"></p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        using HmNetCOM;
+    </h3>
+    <p>必須ではありませんが、「using HmNetCOM」として名前空間を using するのが一般的な使用方法となるかと思います。</p>
+    <fieldset class="code">
+        <legend>MyTest.cs</legend>
+        <pre class="brush:csharp; highlight:[5]">using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using HmNetCOM;
+  </pre>
+    </fieldset>
+</div>

@@ -1,0 +1,61 @@
+﻿
+<div class="content-box mb-3 content-lighten">
+<h2><i class="fa fa-book fa-fw"></i>C# 9.0から追加された「nint」という型</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>概要</h3>
+        <p>
+            これまでの解説では、秀丸マクロとのやりとりの数値型の部分は「IntPtr」型を利用してきました。<br>
+        </p>
+        <p>
+            <span class="positive">Visual Studio 2019 の version 16.8 以降では、C#9.0</span>が利用でき、<br>
+            <mark>「32bit版だと数値が32bit」「64bit版だと数値が64bit」という目的のための「nint」という新たな型</mark>が用意されています。
+        </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>nint 利用の準備</h3>
+    <p>.NET Frameworkでは、たとえ 4.8を選択したとしても、デフォルトではC#7.3が割り当てられます。<br>
+    このため、<mark>C#9.0を利用するためには、.csprj ファイルをテキストエディターで開いて以下のように書き換えてやる</mark>必要があります。</p>
+    <p><img src="./other_soft/hm_dotnet/cnt_hm_dotnet_introduction_08_01.png"></p>
+    <fieldset class="code">
+        <legend>TestNint.csproj</legend><pre class="brush:csharp;">            &lt;LangVersion&gt;latestMajor&lt;/LangVersion&gt;
+</pre>
+</fieldset>
+<p>もしくは</p>
+<fieldset class="code">
+    <legend>TestNint.csproj</legend><pre class="brush:csharp;">        &lt;LangVersion&gt;9&lt;/LangVersion&gt;
+    </pre>
+</fieldset>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>IntPtrの代わりにnint</h3>
+    <p>IntPtrの代わりにnintを用いることで、数値関連のキャストを大幅にカットすることが出来、見通しがよくなります。</p>
+    <fieldset class="code">
+        <legend>TestNint.cs</legend><pre class="brush:csharp;">using System;
+
+namespace TestNint
+{
+    public class Class1
+    {
+        public static nint abc(nint b)
+        {
+            int c = 1000;
+            return 3 + b + c;
+        }
+
+        public static IntPtr ddd(IntPtr c)
+        {
+            IntPtr e = (IntPtr)3;
+            return abc(e);
+        }
+    }
+}
+</pre>
+</fieldset>
+
+<p><mark>nintは2020年11月にC#9.0として加わった機能であるため、まだ認知度は低い</mark>です。<br>
+このため、以降の解説でも基本的にはIntPtrでの解説となっていますが、<br>
+nintが使えるという方は積極的に利用し、ソースをすっきりとさせることをお勧めします。<br>
+<br>
+但し、対象の数値がポインターやハンドル目的で利用する場合、nintよりもIntPtrと記載した方が意味をとらえやすいでしょう。<br>
+</p></div>

@@ -1,0 +1,245 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-plug fa-fw"></i>C#の知識を流用する</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>この説では、C#や.NETの知識はあるものの、C++やC++/CLIの知識はほとんど無い、という人が<br>
+        ScenarioModを記述する上においてのノウハウや方法論の１つを提示しています。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ScenarioModは、C++/CLI</h3>
+    <p>ScenarioModはC++/CLIで構成されています。<br>
+    </p>
+    <p>この意味すところは、<b>「.NET FrameWork」のほとんど全ての資産を簡単に利用できる。</b><br>
+        ということです。<br>
+    </p>
+    <p>今やWindows上の資産や便利な機能は、 .NET FrameWork、「特にC#」を中心に展開されています。<br></p>
+    <p>「プロユースのC/C++はわかりません、でもC#なら簡単なGUIアプリなら作れます。」<br>
+        という方向へと人々の傾向が変化していくであろうことは、疑いの余地がありません。<br>
+    </p>
+    <p>また、マイクロソフト自身がそのように誘導していますし、<br>
+        その現象は、Windowsに留まず、Mac、Linuxへと波及してゆくでしょう。<br>
+        (iPhoneやAndroidのある程度の規模のゲームは、UnityのC#で作られたものが多い)<br>
+    </p>
+    <p>では、C#の知識を持つ人が、<br>
+        ScenarioModを記述する上で、その知識を活かすにはどうすれば良いのでしょうか？<br>
+    </p>
+    <p>ここでは、この点にフォーカスを当ててみます。<br>
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>便利なツール「C# to C++ Converter」</h3>
+    <p>そこで管理人がお勧めするのが、「C# to C++ Converter」です。<br>
+    </p>
+    <p><a href="http://www.tangiblesoftwaresolutions.com/Free_Editions.html">このページ</a> に 「Install C# to C++ Converter」というものがあります。<br>
+    </p>
+    <p>実はこれが非常に役に立ちます。<br>
+    </p>
+    <p><b>このツールは、C#のソースをC++/CLI へと非常に高い精度で変換できます。</b> <br>
+    </p>
+    <p><img src="./cnt_mod/mod_snmod/cnt_csharp_to_cppcli_01.png"><br>
+    </p>
+    <p>完全なエラーのないソースであればあるほど、あるいは、 <br>
+        完成されたVC#のプロジェクトであるほど、正確な変換が可能となりますが、 <br>
+
+        部分的なソースでも、高い精度での変換が可能です。 <br>
+    </p>
+    <p>下図のように左側に、C#のソースを記述します。<br>
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>C# to C++ Converter の必須設定</h3>
+    <ul class="pointlist">
+        <ul class=" arrowlist">
+        <li>
+            <h5>「array」だとエラーになるので「cli::array」になるように設定変更</h5>
+            VS2015以降では、C++11のarray型とC++/CLIのarrayの名前空間上での優先順位が変化したため、<br>
+            arrayのままだと、エラーになりやすくなります。<br>
+            以下のようにな設定をして変更しておくことを強くお勧めします。<br>
+            <p><img src="./cnt_cpp_language/cnt_tool/cnt_tool_cs_to_cpp_01.png"></p>
+            <p><img src="./cnt_cpp_language/cnt_tool/cnt_tool_cs_to_cpp_02.png"></p>
+            <p><img src="./cnt_cpp_language/cnt_tool/cnt_tool_cs_to_cpp_03.png"></p>
+        </li><li>
+            <h5>「 ^」ではなく「^ 」に変更</h5>
+            <p><img src="./cnt_cpp_language/cnt_tool/cnt_tool_cs_to_cpp_04.png"></p>
+            <p><img src="./cnt_cpp_language/cnt_tool/cnt_tool_cs_to_cpp_05.png"></p>
+        </li><li>
+            <h5>C#→C++/CLIへの変換パターン</h5>
+            <p><img src="./cnt_cpp_language/cnt_tool/cnt_tool_cs_to_cpp_06.png"></p>
+    </li></ul>
+    
+    <li>
+        <h4><a href="http://www.tangiblesoftwaresolutions.com/Free_Editions.html">C++ to C# Converter</a></h4>
+
+        <p>ネイティブではない純粋なC++/CLIで記述されていれば、相当正確に変換されます。<br>
+            C++/CLIで記述していたものを一部C#に回したり、元々がC++/CLIのソースだけれど、<br>
+            サンプルとしてはC#にしたい場合など、こちらも多目的に便利です。<br>
+        </p>
+    </li>
+
+    <li>
+        <h4><a href="http://ilspy.net/">ILSpy</a></h4>
+
+        <p>すでにコンパイル済みのマネージドアセンブリDLL(.NET FrameWork系のDLL)を、<br>
+            C#やVB.netの<span class="positive">綺麗なソース状態へと戻すツール</span>です。<br>
+            すでに詳細が不明なコンパイル済みの.dllを、ソースへと戻して内容を確認等する際に役立ちます。<br>
+            また、ソースが公開されていないアセンブリの.NET FrameWorkのバージョンを引き上げるのにも役立ちます。<br></p>
+        <p>ILSpyにより、概ね正確に逆変換が可能ですが、C#の<span class="my_keyword">dynamic</span>型については、<br>
+            正確には変換が出来ません。<br>
+        </p>
+    </li>
+
+    </ul>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <div class="code">
+        <pre class="brush:csharp;">using System;
+using System.Collections.Generic;
+
+class Test {
+    void MyProc() {
+        List&lt;int&gt; mylist = new List&lt;int&gt;();
+        mylist.Add(32);
+        mylist.Add(25);
+
+        foreach(var i in mylist) {
+            Console.WriteLine(i);
+        }
+    }
+}
+</pre>
+    </div>
+    <p>図のように「C++/CLI」をコンボボックスリストから選択します。 <br>
+    </p>
+    <p><img src="./cnt_mod/mod_snmod/cnt_csharp_to_cppcli_03.png"> <br>
+    </p>
+    <div class="code">
+        <pre class="brush:cpp;">using namespace System;
+using namespace System::Collections::Generic;
+
+private ref class Test
+{
+private:
+  void MyProc()
+  {
+    List&lt;int&gt; ^mylist = gcnew List&lt;int&gt;();
+    mylist-&gt;Add(32);
+    mylist-&gt;Add(25);
+
+    for each (auto i in mylist)
+    {
+      Console::WriteLine(i);
+    }
+  }
+};
+</pre>
+    </div>
+    <p>これがC++/CLIです。</p>
+    <p>Linqやdynaimicなど、C#4.0以降に付け加えられた機能を除けば、 <br>
+        C++/CLIは、C#の主要な文法にはほぼ1:1で対応しています、 <br>
+    </p>
+    <p>又、ライブラリは同じものを参照しているわけですから、原則全て利用可能です。 <br>
+    </p>
+
+    <p>C#の可変長引数なども問題なく変換出来ます。<br>
+    </p>
+    <div class="code">
+        <pre class="brush:csharp;">using System;
+using System.Collections.Generic;
+
+class Test {
+
+    int MySumFunc(params int[] values) {
+        int Sum = 0;
+        foreach(int v in values) {
+            Sum += v;
+        }
+        return Sum;
+    }
+    void MyProc() {
+        MySumFunc(1,2,3,4,5,6);
+    }
+}
+</pre>
+    </div>
+
+    <p>同じように、ツールの左側に入力し、「C++/CLI」を選びなおしてみましょう。<br>
+        (C++/CLIと見えてるなら、CTRL+Sボタンでも良い) <br>
+    </p>
+    <div class="code">
+        <pre class="brush:cpp;">using namespace System;
+using namespace System::Collections::Generic;
+
+private ref class Test
+{
+
+private:
+    int MySumFunc(... cli::array&lt;int&gt; ^values)
+    {
+        int Sum = 0;
+        for each (int v in values)
+        {
+            Sum += v;
+        }
+        return Sum;
+    }
+    void MyProc()
+    {
+        MySumFunc(1,2,3,4,5,6);
+    }
+};
+</pre>
+    </div>
+
+    <p>本当にこんな記述が ScenarioModで使えるのでしょうか？ <br>
+    </p>
+    <p>ScenarioModに貼り付けて、<br>
+        「カスタム::On_プレイヤ担当ターン《メイン画面》() 」メソッド内から呼び出してみましょう。 <br>
+    </p>
+
+    <div class="code">
+        <pre class="brush:cpp;">int MySumFunc(... cli::array&lt;int&gt; ^values)
+{
+    int Sum = 0;
+    for each (int v in values)
+    {
+        Sum += v;
+    }
+    return Sum;
+}
+
+void カスタム::On_プレイヤ担当ターン《メイン画面》() {
+    int sum = MySumFunc(1, 2, 3, 4, 5, 6);
+    デバッグ出力 &lt;&lt; sum &lt;&lt; endl;
+}
+
+</pre>
+    </div>
+
+    <p>なんということでしょう、なんという恐ろしさ。 <br>
+        <br>
+        余裕で動作します。 <br>
+    </p>
+    <p>そうです、 <br>
+        これが「共通の.NETというプラットフォーム(CLR)を意識した言語同士だから持つ高い相互変換性」です。<br>
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>Stringとstringの問題点</h3>
+    <p>しかし、１点問題があります。</p>
+    <p>それは.NET FrameWorkのString型(C#のstring=System::String)と、 <br>
+        ScenarioModで頻出するstring型(C++のstd::string)は「 <b>全然違う</b> 」ということです。</p>
+    <p>そこでScenarioModでは、この変換を容易にする仕組みが存在しています。</p>
+    <div class="code">
+        <pre class="brush:cpp;">string nstr = "あああ";
+String^ mstr = String←string(nstr);// C++のstring型から.NET FrameWorkのSystem::String型へ
+
+String^ mmsg = "あいう";
+string nmsg = string←String(mmsg); // .NET FrameWorkのSystem::String型から　C++のstring型へ
+
+</pre>
+    </div>
+    <p>この点だけ注意すれば大丈夫です。</p>
+    <p>存分にC#で得たライブラリの知識を活かして記述できるはずです。</p>
+</div>

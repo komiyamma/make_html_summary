@@ -1,0 +1,41 @@
+<div class="content-box mb-3 content-lighten">
+    <h3>Visual Studio から Azureへと発行</h3>
+    <h4>プロジェクト対象は「ASP.NET Core Webアプリ」や「Blazor WebAssembly」「Blazor Server」など</h4>
+    <p>.NET5系でWebへと発行するものが対象となります。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_dotnet_pinvoke/page_azure_settings_06.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">例としてBlazor Server アプリ</figcaption>
+    </figure>
+    <h4>発行</h4>
+    <p>実際には発行する前に、Webサイトを編集する作業があるわけですが、ここでは問題とはしません。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_dotnet_pinvoke/page_azure_settings_07.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">プロジェクトを右クリして発行</figcaption>
+    </figure>
+    <h4>Azureを出力先として選択</h4>
+    <p>Azureクラウドを出力先に選択します。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_dotnet_pinvoke/page_azure_settings_08.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">一番上に来ていることから見てわかる通り、Azureへの発行が主に想定されています</figcaption>
+    </figure>
+    <h4>Azure上での「Webアプリ作成」時に「Windows」にしたか「Linux」にしたか</h4>
+    <p>Windowsを選択します。もしも有料コースでLinuxにしている場合は、Linux側を選択してください。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_dotnet_pinvoke/page_azure_settings_09.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">デスクトップがWindowsであれば、Azure App Serviceも「Windows」の方が制限がない</figcaption>
+    </figure>
+    <h4>「Webアプリ作成時」のリソース名を選ぶだけ</h4>
+    <p>Azure上で制作したリソース名を選ぶだけです。<br>
+        Visual Studioのアカウントと、Azure Portalのアカウントが一致していれば、<br>自動的に選択対象が見えているはずです。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_dotnet_pinvoke/page_azure_settings_10.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">自動的にAzureの発行先が選択候補として現れる</figcaption>
+    </figure>
+    <h4>「事前に」Azure Portal内でWebアプリの枠を作成する必要はない</h4>
+    <p>今回は、事前にAzure PortalにてWebアプリの「枠」を作成していましたが<br>
+        実際には、Visual Studio側から、Azureに発行する際に、「SKYとサイズ」の指定(Free F1など)や、<br>リージョンの指定(East Japanなど)も出来ますので、<br>
+        「Free F1に一旦発行してパッと確認」という程度の目的ならばAzure Portal内で作成するのではなく、<br>
+        Visual Studio側で全てやってしまうのが良いでしょう。<br><br>
+        ただし、細かな設定などを考慮すると、事前にAzure Portal内で作成する方が応用が効きます。
+    </p>
+</div>

@@ -1,0 +1,77 @@
+<div class="content-box mb-3 content-lighten">
+<h2><i class="fa fa-book fa-fw"></i>フォームを利用するパターン</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>概要</h3>
+        <p>
+            hm.NETとC#を使い、フォームを表示するような機能を制作してみましょう。
+        </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>
+            フォームを制作するパターン
+        </h3>
+        <ul class="pointlist">
+            <li>
+                <h4>C#側のソース</h4>
+                フォームを利用する時のコツは、フォームのインスタンスを継続的でstaticな変数に入れて維持しておくことと、<br>
+                SetDetathMethodを利用して、秀丸が閉じた時に、フォームも閉じるようにすることです。
+                <fieldset class="code">
+                    <legend>HmTestClass05.dllとしてコンパイルのこと</legend><pre class="brush:csharp">using System;
+using System.Windows.Forms;
+
+namespace HmTestClass05
+{
+    class MyForm : Form
+    {
+        public MyForm()
+        {
+
+        }
+    }
+
+    public class Class5
+    {
+        public static Form form;
+
+        public static IntPtr CreateForm()
+        {
+            if (form == null || !form.Visible) {
+                form = new MyForm();
+            }
+
+            form.Show();
+            return (IntPtr)1;
+        }
+
+        public static IntPtr OnDetachMethod(IntPtr reason)
+        {
+            if (form != null)
+            {
+                form.Close();
+                form = null;
+            }
+
+            return (IntPtr)1;
+        }
+
+    }
+}
+</pre>
+                </fieldset>
+            </li><li>
+                <h4>秀丸マクロ側のソース</h4>
+
+                <fieldset class="code">
+                    <legend>test01.macなどと適当に名前を付ける</legend><pre class="brush:hmmacro">#HMNET = loaddll( hidemarudir + @"\hm.NET.dll" );
+
+#r = dllfuncw( #HMNET, "SetDetachMethod", currentmacrodirectory + @"\HmTestClass05.dll", "HmTestClass05.Class5", "OnDetachMethod" );
+#r = dllfuncw( #HMNET, "CallMethod", currentmacrodirectory + @"\HmTestClass05.dll", "HmTestClass05.Class5", "CreateForm" );
+</pre>
+                </fieldset>
+                <p>
+                    マクロを実行するとフォームが表示されます。<br>
+                    秀丸を閉じるとOnDetachMethodが実行されますので、フォームも閉じられます。
+                </p>
+        </li></ul>
+</div>

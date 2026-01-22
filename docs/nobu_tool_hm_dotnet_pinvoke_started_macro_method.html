@@ -1,0 +1,188 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>秀丸マクロを改めて実行（メソッド編）</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>
+        さて、前節ではHm.Macro.Exec.Eval(...)を使った文字列での実行をしました。<br></p>
+    <p>
+        これまでの秀丸の様々なメソッドの半数ほどは、「秀丸マクロ実行中のみ実行可能」というものが散見されたはずです</p>
+    <p>すなわち、一般的には「非同期中」は「秀丸マクロ実行中ではない」ため、</p>
+    <p>このため、Hm.Macro.Exec.Eval(...)のマクロへと値を伝達しようとしても、「マクロ実行中ではない」ため、Hm.Macro.Var などが利用できず、<br>
+        値を伝搬するのも難しいという状況になります。</p>
+    <p>
+        この問題を一気に解決するのが、「Hm.Macro.Exec.Method(...)」です。
+    </p>
+    <p>
+        Hm.Macro.Exec.Method(...)は、指定のC#メソッドを「改めて新規の秀丸マクロ実行中」にしつつ呼び出せ、<br>
+        という命令となります。
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        秀丸マクロを改めて実行
+    </h3>
+    <p><mark>マクロを実行していない時にのみ、実行することが出来ます。</mark></p>
+    <blockquote>Hm.Macro.Exec.Method(string message_parameter, Delegate delegate_method)</blockquote>
+    <p>呼び出せるメソッドは</p>
+    <blockquote>public static IntPtr your_method(string message_parameter)</blockquote>
+    <p>の形です。<br>
+    <mark>public なメソッド</mark>を呼び出すことができます。</p>
+    <ul class="pointlist">
+        <li>
+            <h4>例①</h4>
+            <fieldset class="code">
+                <legend>MyTestForm.cs</legend>
+                <pre class="brush:csharp; highlight:[12,21, 25,37]">using System;
+using System.Reflection;
+using HmNetCOM;
+
+namespace HmTest
+{
+    // (public static IntPtr abc)がマクロから見えるようにするため、publicにする
+    public class HmTestForm
+    {
+
+        // 呼び出せるメソッドは「IntPtr your_method(string message_parameter)の形
+        delegate IntPtr TMacroScopeMethod(string message_parameter);
+
+        // 非同期やTickなどのメソッドだと仮定する
+        protected void MethodTick()
+        {
+            try
+            {
+                // デリゲートを使った関数オブジェクトを作り、
+                TMacroScopeMethod method = new TMacroScopeMethod(HmTest.HmTestForm.abc);
+                // TMacroScopeMethod method = abc; // と記述するのが普通かも
+                // Func&lt;String, IntPtr&gt; method = abc; // と記述してもOKです。
+
+                // この返り値の型は Hm.Macro.Exec.Eval(...) と同じ
+                // message_parametr に入れる文字列の用途は好きにしてよい。分岐判別用途に使ったり、伝達パラメータに使ってもよい。
+                var ret = Hm.Macro.Exec.Method("my test param", method);
+
+                System.Diagnostics.Trace.WriteLine(ret.Message);
+               //  Hm.OutputPane.Output(ret.Message);
+            } catch(Exception e)
+            {
+                System.Diagnostics.Trace.WriteLine(e.Message);
+            }
+        }
+
+        // 非同期中から呼び出されたこのメソッドは「新たなマクロ実行中」という形で呼び出される。
+        // 「マクロ実行中」であるため、このメソッドの間だけ秀丸に対して同期となり、Hm.NetCOMのメソッド群をおおいに利用することが可能となる。
+        public static IntPtr abc(string message_parameter)
+        {
+            Hm.Macro.Var["$myvar"] = "abc";
+            Hm.OutputPane.Output(message_parameter + "\r\n");
+            Hm.OutputPane.Output(Hm.Macro.Var["column"].ToString() + "\r\n");
+            Hm.OutputPane.Output(Hm.Macro.Var["$myvar"] + "\r\n");
+            Hm.Macro.Statement("moveto", 3, 2);
+
+            return (IntPtr)1;
+        }
+    }
+
+}
+</pre>
+            </fieldset>
+        </li>
+    </ul>
+    <ul class="pointlist">
+        <li>
+            <h4>例②</h4>
+            <fieldset class="code">
+                <legend>MyTestForm.cs</legend>
+                <pre class="brush:csharp;">using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using HmNetCOM;
+
+namespace NET4COMServer
+{
+    [Guid("BD55F2A6-9ED0-4F4F-9D37-E6B84BE63272")]
+    public class NET4COMServer
+    {
+        // 確認しやすいようコンソール表示のため
+        [DllImport("kernel32.dll")]
+        private static extern bool AllocConsole();
+
+        // 静的コンストラクタ（static付きコンストラクタ）でコンソール表示を読んでおけば良い。
+        static NET4COMServer()
+        {
+            AllocConsole();
+        }
+
+        // 非同期中から呼び出されたこのメソッドは「新たなマクロ実行中」という形で呼び出される。
+        // 「マクロ実行中」であるため、このメソッドの間だけ秀丸に対して同期となり、Hm.NetCOMのメソッド群をおおいに利用することが可能となる。
+        public static IntPtr abc(string message_parameter)
+        {
+            Hm.Macro.Function("message", "10");            
+
+            return (IntPtr)1;
+        }
+
+        // 非同期のメソッド
+        static string HeavyMethod()
+        {
+            Thread.Sleep(2000);
+
+            // このdllがあるディレクトリ
+            string asmLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string dir = System.IO.Path.GetDirectoryName(asmLocation);
+
+            // マクロを実行していない時
+            if (!Hm.Macro.IsExecuting)
+            {
+                Func&lt;string, IntPtr&gt; method = abc;
+                // 「あいうえお」という文字列を編集中のテキストに挿入。
+                var result = Hm.Macro.Exec.Method("最後まで実行出来た", method);
+                Console.WriteLine(result.Message + "★");
+                if (result.Message == "最後まで実行出来た")
+                {
+                    Console.WriteLine("実行成功");
+                }
+                else
+                {
+                    Console.WriteLine("実行失敗");
+                }
+            }
+            System.Diagnostics.Trace.WriteLine("非同期関数");
+
+            return "非同期関数";
+        }
+
+        // 秀丸から呼び出すCOMのメソッド。COM呼び出しだとstaticを付けては駄目。
+        public string CalledFuncFromHidemaruMacro()
+        {
+            Task&lt;string&gt; task = Task.Run(() =&gt; {
+                return HeavyMethod();
+            });
+
+            // awaitやTaskのResult待ちしないので、この関数自体は一瞬で抜けていく。
+            return "同期関数";
+        }
+    }
+}
+</pre>
+            </fieldset>
+        </li>
+    </ul>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <ul class="arrowlist">
+        <li>
+            <h5>返り値のMessageプロパティ</h5>
+            <p>
+                Hm.Macro.Exec.Methodが最後まで実行できたならば、<span class="positive">Messageプロパティ</span>に「message_parameter」で渡した値が入っていることでしょう。<br>
+            </p>
+            <h5>返り値のErrorプロパティ</h5>
+            <p>
+                途中でなんらかのエラーが発生した場合は、ErrorプロパティになんらかのExceptionオブジェクトが入っています。<br>
+                何もエラーがなければ、nullが入っています。
+            </p>
+    </li></ul>
+</div>

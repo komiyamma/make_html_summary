@@ -1,0 +1,104 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>秀丸マクロ上の静的な変数の値を読み取る・書き換える (秀丸エディタ 9.15以降)</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>
+        hm.NETでは秀丸マクロの「静的な変数」を常時読み書きすることが出来ます。<br>
+        秀丸マクロの「静的な変数」とは、秀丸マクロでいうところの <a href="https://help.maruo.co.jp/hidemac/html/155_OtherStatement_setstaticvariable.html">setstaticvariable 文</a> や <a href="https://help.maruo.co.jp/hidemac/html/070_Function_getstaticvariable.html">getstaticvariable 関数</a> で対象となっている変数に相当します。)
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>
+        秀丸マクロ上の静的な変数の値を読み取る・書き換える
+    </h3>
+    <p>マクロ実行中のみ、読み取り・書き換え可能</p>
+    <blockquote>string Hm.Macro.StaticVar.Get( string key, int sharedflag )</blockquote>
+    <blockquote>bool Hm.Macro.StaticVar.Set( string key, string value, int sharedflag )</blockquote>
+    <fieldset class="alert alert-info">
+        <legend>共用メモリのタイプを表す最後の引数</legend>
+        上述の getstaticvariable や setstaticvariable の解説を見ればわかりますが、<br>
+        最後の引数に -1 を指定することで、「該当のプロセスのみ」「マクロ実行中のみ」という変数のライフサイクルとなる一方で、<br>
+        該当の静的変数はメモリ制限のない状態に出来ます。<br>
+        (静的変数は32767個までという制限はある)<br>
+        (厳密にはWindowsのアプケーションとしてのメモリ制限は受けます)
+    </fieldset>
+    <ul class="pointlist">
+        <li>
+            <h4>C#側のソース</h4>
+            <fieldset class="code">
+                <legend>.NET5ではなく、.NET Framework 4.xで作成したと過程</legend>
+                <pre class="brush:csharp">using System;
+using System.Runtime.InteropServices;
+using HmNetCOM;
+
+namespace NET4COMServer
+{
+    [Guid("C48791B2-D852-401D-AF6A-566D0FCA20D8")]
+    public class NET4COMServer
+    {
+        public String test()
+        {
+            try
+            {
+                bool b = Hm.Macro.StaticVar.Set("hoge", "あいうえお", -1);
+                string ret = Hm.Macro.StaticVar.Get("hoge", -1);
+                Hm.OutputPane.Output("テスト");
+                return ret;
+            }
+            catch (Exception e)
+            {
+                Hm.OutputPane.Output(e.Message);
+            }
+            return "";
+        }
+    }
+}
+</pre>
+            </fieldset>
+        </li><li>
+            <h4>秀丸マクロ側のソース</h4>
+
+            <fieldset class="code">
+                <legend>HmClassTest.macなどと適当に名前を付ける</legend>
+                <pre class="brush:hmmacro">#obj = createobject( currentmacrodirectory + @"\NET4COMServer.dll", "NET4COMServer.NET4COMServer" );
+$result1 = member(#obj, "test");
+message getstaticvariable("hoge", -1);
+message $result1;
+</pre>
+            </fieldset>
+            </li><li>
+                <h4>C#側のソース</h4>
+                <blockquote>string Hm.Macro.StaticVar[ string key, int sharedflag ]</blockquote>
+                <blockquote>void Hm.Macro.StaticVar[string key, int sharedflag ] = value</blockquote>
+                <fieldset class="code">
+                    <legend>StaticVar[varname, sharedscope]という形も可能</legend>
+                    <pre class="brush:csharp;highlight:[14,15]">    using System;
+    using System.Runtime.InteropServices;
+    using HmNetCOM;
+    
+    namespace NET4COMServer
+    {
+        [Guid("C48791B2-D852-401D-AF6A-566D0FCA20D8")]
+        public class NET4COMServer
+        {
+            public String test()
+            {
+                try
+                {
+                    Hm.Macro.StaticVar["hoge", -1] = "あいうえお";
+                    string ret = Hm.Macro.StaticVar["hoge", -1];
+                    Hm.OutputPane.Output("テスト");
+                    return ret;
+                }
+                catch (Exception e)
+                {
+                    Hm.OutputPane.Output(e.Message);
+                }
+                return "";
+            }
+        }
+    }
+    </pre>
+                </fieldset>    </li></ul>
+</div>
