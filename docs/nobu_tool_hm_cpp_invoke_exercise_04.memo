@@ -1,0 +1,1 @@
+C++からPCのCPUスレッド数を取得する方法。std::thread::hardware_concurrency()を利用し、秀丸マクロへ通知する実装例を解説。非常に便利です。
