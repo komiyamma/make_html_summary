@@ -1,0 +1,1 @@
+Hm.NetCOMで秀丸マクロの静的変数を操作する方法。Hm.Macro.StaticVar.Get/Setを用いてC#から値を読み書きする例を詳しく解説。非常に便利。
