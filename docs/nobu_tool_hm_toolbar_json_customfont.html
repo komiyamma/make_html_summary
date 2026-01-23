@@ -1,0 +1,175 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-file-image-o fa-fw"></i>オリジナルなボタンを作成する</h2>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_17.png"></p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>アイコン(フォント文字)の編集 に FontForge</h3>
+    <p>アイコンを編集するには、当管理人は普段は「<a href="https://opentype.jp/ttedit.htm">TTEdit</a>」を利用しているのですが、<br>
+        有料ですし、所持していない人がほとんどでしょうから、<br>ここでは、無料で使える「<a href="https://fontforge.org/en-US/">FontForge</a>」という有名なソフトでの解説とします。<br>
+    </p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_27.png"></p>
+    <h4>FontForgeをインストール</h4>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_16.png"></p>
+    <p>普通にインストールしてください</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>HmToolBar.ttfの読み込み</h3>
+    <p>FontForge を起動して、HmToolBar.ttf ファイルを読み込みます。</p>
+    <p>デフォルトだと「Document」と見えているところをマウスでクリックして、<br>
+        順番にファイルをたどっていくか、<br>
+        もしくは、パスを指定してファイルを読みこむのですが<br>
+        下の画像にあるように<span class="negative">パスの形式は「/」にする必要があり「\」のままでは読み込めません。</span>
+    </p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_04.png">
+    </p>
+    <p><span class="negative">「ファイルが見つかりません」といったエラーは、ほぼ間違いなく「\」のパス区切りのままファイルを指定しています。</span></p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>すでに存在する文字の位置を見つけよう</h3>
+    <p>下の画像の右下の「スクロール位置」にあるように、全体の下付付近にだけ文字が入っています</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_03.png">
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>文字を編集してみよう</h3>
+    <p>今回はネットから「ロゴ画像」などなんらかの画像を取得し、<br>それをフォントにと変換する手順を軽く解説します。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>下画像の赤い枠の部分の「フォントの文字」を編集しますので、<br>赤枠のフォントをダブルクリックし、
+        グリフを表示</h3>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_07.png">
+    </p>
+    <h4>最初から入っている「■」をクリア</h4>
+    <p>「<kbd>CTRL</kbd>+<kbd>A</kbd>して<kbd>DEL</kbd>」なり、「マウスをドラッグして範囲選択して<kbd>DEL</kbd>」なりして、<br>
+        最初からあるグリフ情報を削除しましょう。<br>
+        <mark>このクリアをしない場合、何か新しい文字を設定しても、全体が真っ黒</mark>なままになります。
+    </p>
+
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_18.png"><br>
+        ↑全体を選択して削除 (<kbd>CTRL</kbd>+<kbd>A</kbd>して<kbd>DEL</kbd>)<br>
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ネットから適当に画像取得</h3>
+    <p>ここではネットなどから「ロゴ画像」などなんらかの画像を取得し、<br>それをフォントにと変換する手順を軽く解説します。</p>
+    <p>まず、今回は有名なPythonの画像をネットから探してきましょう。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_05.png">
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>.png 形式もしくは .bmp 形式で保存</h3>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_06.png">
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>FontForge のメニューから「ファイル」→「取り込み」</h3>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_19.png"></p>
+    <p>保存した.pngなり.bmp なりのファイルを指定して取り込んでください。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_08.png"></p>
+    <p>取り込むと画像が表示されますが、<mark>単に画像が表示されているだけで文字になってません</mark>。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_20.png"></p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>FontForge のメニューから「エレメント」→「自動トレース」</h3>
+    <p>画像を実際にフォントグリフにするためには、トレースします。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_09.png"></p>
+    <p>実際には手動で多少編集することが多いですが、今回は割愛します。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_21.png"></p>
+    <p>このPythonのマーク編集に使ったこのウィンドウを閉じます。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_10.png">
+    </p>
+    <p>文字内容がちゃんと変化しました。</p>
+</div>
+<!-- div class="content-box mb-3 content-lighten">
+    <h3>「上下左右」への移動、もしくは「拡大縮小」</h3>
+    <p>難しい操作をすることはほとんどないはずです。<br></p>
+    <ul>
+        <li>すべてのグリフを選択して、「全体の移動」もしくは「拡大縮小」</li>
+        <li>もしくは「１つもしくは複数の頂点」を掴んで移動</li>
+    </ul>
+    <p>これぐらいしかしないかと思います。</p>
+    <h4>選択範囲を上下左右に移動</h4>
+    <p></p><kbd>CTRL</kbd>+<kbd>A</kbd> で全体の頂点を選択した後、<br>
+    下図のように「矢印アイコン」を選択し、<br>
+    上下左右の矢印キー(やマウス)で移動できます。
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_31.png"></p>
+    <h4>選択範囲を拡大・縮小</h4>
+    <p></p><kbd>CTRL</kbd>+<kbd>A</kbd> で全体の頂点を選択した後、<br>
+    下図のような「２つの大小の□」を選択した状態で、<br>
+    マウスで大きくする方向に動かしたり小さくする方向に動かすと、拡大縮小できます。
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_30.png"></p>
+    <p>「小さなアイコンとして表示されるため」<br>
+    <h4>実際の編集作業では...</h4>
+        実際の作成過程では手動で頂点位置を多少編集することが多いですが、今回は割愛します。</p>
+    <h4>ウィンドウを閉じる</h4>
+</！div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ウィンドウを閉じる</h3>
+    <p>今編集していたPythonのマークが出てるウィンドウを閉じます。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>赤枠だったフォントがPythonロゴのフォントになりました</h3>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_10.png">
+    </p>
+</div -->
+<div class="content-box mb-3 content-lighten">
+    <h3>HmToolBar.ttf として出力</h3>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_10.png">
+    </p>
+    <p>文字内容が変化しましたので、フォント内容を出力します。</p>
+    <p>FontForgeのメニューから、「フォントを出力」を選び、<br></p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_11.png">
+    </p>
+    TrueTypeフォントにして、「HmToolBar.ttf」として「生成」ボタンを押しましょう。<p></p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_12.png">
+    </p>
+    <p>フォントの基礎的な情報(フォント名や全体のフォント情報)は、<br>
+        元々HmToolBar.ttfに設定されているため、編集や設定する必要はありません。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_13.png">
+    </p>
+    <p>警告が出ますが、無視して「生成」を押しましょう</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>生成したフォントを改めてインストール</h3>
+    <div class="content-box mb-3 content-lighten">
+        <p>HmToolBar.ttfを、
+            「プログラムから開く」→「Windows フォントビューアー」を選択して「インストール」してください。<br>
+        </p>
+        <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_14.png"></p>
+        <p>もしくは「C:\Windows\Font」ディレクトリに「HmToolBar.ttf」をコピペしても良いです。</p>
+    </div>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>HmToolBar.jsonを改めてみてみる</h3>
+    <p>一度秀丸を終了し、改めてHmToolBar.jsonを開いてみましょう</p>
+    <p>以下のようにPythonのアイコンが見えてればOKです</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_22.png">
+    </p>
+    <p>新たなに用意したアイコン(文字)を使う場合は、該当の見えてる文字をコピペすればよいだけですので簡単です。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>HmToolBar.jsonを改めてみてみる</h3>
+    <p>一度秀丸を終了し、改めてHmToolBar.jsonを開いてみましょう</p>
+    <p>以下のようにPythonのアイコンが見えてればOKです</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_22.png">
+    </p>
+    <p>新たなに用意したアイコン(文字)を使う場合は、該当の見えてる文字をコピペすればよいだけですので簡単です。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>HmToolBar.jsonを改めてみてみる</h3>
+    <p>一度秀丸を終了し、改めてHmToolBar.jsonを開いてみましょう</p>
+    <p>以下のようにPythonのアイコンが見えてればOKです</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_22.png">
+    </p>
+    <p>新たなに用意したアイコン(文字)を使う場合は、該当の見えてる文字をコピペすればよいだけですので簡単です。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>FontForgeの文字一覧から「使いたい文字をコピー」する</h3>
+    <p>使いたい文字をFontForgeから直接コピーすることも可能です。</p>
+    <p>コピーしたい文字を「右クリック」して、メニューから「グリフ情報」を選択します</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_28.png">
+    </p>
+    <p>「Unicode文字」とあるところの文字をコピーし、エディタにペーストすれば、該当の文字をエディタに挿入できます。</p>
+    <p><img src="./other_soft/hm_toolbar_json/hm_toolbar_json_29.png">
+    </p>
+</div>
