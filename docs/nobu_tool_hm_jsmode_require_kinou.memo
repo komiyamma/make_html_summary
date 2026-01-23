@@ -1,0 +1,1 @@
+jsmodeにおけるrequire関数の機能詳細。exportsやmodule.exportsによるモジュール化、ファイルパス変数、JSON読み込み、キャッシュ非対応の仕様解説。

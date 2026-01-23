@@ -1,0 +1,1 @@
+IronPythonとHTML Agility Packを連携させ、多少崩れたHTMLであってもDOM解析を行い、特定の要素を柔軟に抽出・置換する秀丸マクロの実装例です。
