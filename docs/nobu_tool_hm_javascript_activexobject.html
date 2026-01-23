@@ -1,0 +1,97 @@
+<div class="content-box mb-3 content-lighten">
+<h2><i class="fa fa-book fa-fw"></i>「hmJS」でActiveXObject</h2>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>ここでは、hmJSでActiveXOject関連の使い方について触れています。<br>
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>WScript.Echo(...) などの古い記述</h3>
+    <p>WScript.Echo(...)などは、JScript本体というよりも、WSHとして特別に追加されている関数ですので、<br>
+        hmJSでは直接に対応してはいません。<br>
+    しかし、「WScript.Echo」については、古いソースの記述で非常に頻出していたため、<br>
+        そのままの記述で利用したい、といったこともあるかもしれません。</p>
+    <p>そういった場合には、自身でそのような定義をすればよいことでしょう。</p>
+    <div class="code"><pre class="brush:js">#JS = loaddll( hidemarudir + @"\hmJS.dll" );
+
+// WScript.Echo系を定義しておいて…
+#_ = dllfuncw( #JS, "DoString", R"JS(
+  WScript = {
+    'Echo' : function(obj)
+    {
+        hm.Macro.Statement("message", obj.toString());
+    }
+  };
+)JS"
+);
+
+// 使う…
+#_ = dllfuncw( #JS, "DoString", R"JS(
+  WScript.Echo("あいう");
+)JS"
+);
+
+freedll( #JS );
+</pre></div>
+
+
+
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ActiveXObject</h3>
+    <p>本来 JScriptのWSHやActiveXObjectなどの記述は、するべきではありません。<br>
+    (WSH自体が10年前から準廃止予定で、マイクロソフトは順次フェイドアウトさせています)<br>
+    </p>
+    <p>しかし、既存のコードを可能な限り流用したい、<br>
+    といった要望は現実として存在します。<br>
+    </p>
+    <p>先のWScript.Echoの実装とあわせて、以下のように、従来の.jsによるActiveXObjectの記述と同じ記述がそのまま利用可能です。</p>
+    <div class="code"><pre class="brush:python">#JS = loaddll( hidemarudir + @"\hmJS.dll" );
+
+#_ = dllfuncw( #JS, "DoString", R"JS(
+
+//  ボタンの種類
+var BTN_OK                 = 0;    // [ＯＫ]ボタン
+var BTN_OK_CANCL           = 1;    // [ＯＫ][キャンセル]ボタン
+var BTN_STOP_RETRI_DISRGRD = 2;    // [中止][再試行][無視]ボタン
+var BTN_YES_NO_CANCL       = 3;    // [はい][いいえ][キャンセル]ボタン
+var BTN_YES_NO             = 4;    // [はい][いいえ]ボタン
+var BTN_RETRI_CANCL        = 5;    // [再試行][キャンセル]ボタン
+
+//  アイコンの種類
+var ICON_STOP              = 16;   // [Stop]アイコン
+var ICON_QUESTN            = 32;   // [?]アイコン
+var ICON_EXCLA             = 48;   // [!]アイコン
+var ICON_I                 = 64;   // [i]アイコン
+
+//  押されたボタンごとの戻り値
+var BTNR_OK                =  1;   // [ＯＫ]ボタン押下時
+var BTNR_CANCL             =  2;   // [キャンセル]ボタン押下時
+var BTNR_STOP              =  3;   // [中止]ボタン押下時
+var BTNR_RETRI             =  4;   // [再試行]ボタン押下時
+var BTNR_DISRGRD           =  5;   // [無視]ボタン押下時
+var BTNR_YES               =  6;   // [はい]ボタン押下時
+var BTNR_NO                =  7;   // [いいえ]ボタン押下時
+var BTNR_NOT               = -1;   // どのボタンも押さなかったとき
+
+
+//  Windowsシェルへのアクセスを提供するオブジェクト
+var sh = new ActiveXObject( "WScript.Shell" );
+
+//  ポップアップウインドウを表示(10秒後に自動終了)
+var rtn = sh.Popup( "ボタンを押してください！", 10, "確認", (BTN_YES_NO_CANCL + ICON_QUESTN) );
+
+//  オブジェクトを解放
+sh = null;
+
+//  戻り値をデバッグ表示
+hm.debuginfo(rtn);
+
+)JS"
+);
+
+freedll( #JS );
+</pre></div>
+</div>

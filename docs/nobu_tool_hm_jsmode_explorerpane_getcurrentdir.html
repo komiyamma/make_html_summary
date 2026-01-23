@@ -1,0 +1,25 @@
+<div class="content-box mb-3 content-lighten">
+  <h2><i class="fa fa-book fa-fw"></i>ファイルマネージャ枠の現在のフォルダのパスを取得</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+  <h3>getCurrentDir</h3>
+  <p>フォルダツリーとファイル一覧の現在のフォルダのパスを取得します。<br>
+    秀丸本体のカレントフォルダとは異なるので注意してください。<br>
+    あくまでもファイルマネージャ枠のカレントフォルダです。<br>
+  </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+  <h3>ファイルマネージャ枠の現在のフォルダのパスを取得</h3>
+  <blockquote>namespace ExplorerPane {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;getCurrentDir(): string;<br>
+    }</blockquote>
+  <p>ファイルマネージャ枠の現在のフォルダのパスを返す。<br>
+    失敗した場合、空文字を返す。</p>
+  <fieldset class="code">
+    <legend>aaa.js</legend>
+    <pre class="brush:js">debuginfo(2);
+var curdir = ExplorerPane.getCurrentDir();
+console.log(curdir);
+</pre>
+  </fieldset>
+</div>

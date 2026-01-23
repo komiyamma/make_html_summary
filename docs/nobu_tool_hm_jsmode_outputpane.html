@@ -1,0 +1,110 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-js fa-fw"></i>jsmode - outputpane</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>アウトプット枠に表示したり、アウトプット枠を操作するHmOutputPane.dllをラップしたモジュールです。</p>
+    <img src="./other_soft/hm_jsmode_outputpane/cnt_hm_jsmode_outputpane_01.png">
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ダウンロード</h3>
+    <div class="card mb-3 ms-3" style="max-width: 30rem;">
+        <div class="card-body text-center">
+            <a href="https://github.com/komiyamma/hm_jsmode_outputpane/releases" class="btn btn-primary"><i class="fa fa-download fa-fw"></i>outputpane v1.1.0</a>
+        </div>
+    </div>
+    <img src="https://img.shields.io/badge/Hidemaru-v9.19-6479ff.svg">
+    <img src="https://img.shields.io/badge/JScript-OK-6479ff.svg">
+    <img src="https://img.shields.io/badge/WebView2-OK-6479ff.svg"><br>
+    <img src="https://img.shields.io/badge/execjs-OK-6479ff.svg">
+    <img src="https://img.shields.io/badge/require-OK-6479ff.svg">
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>必要なファイルは outputpane.js と outputpane.dll の２つ</h3>
+    <p>ダウンロード先の中で必要なのはoutputpane.zipのみとなります。<br>
+    outputpane.js と outputpane.dll の２つのファイルが必要です。</p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>outputpane.js自体の配置場所を決める</h3>
+    <p>outputpane.js自体の理想的な配置場所は「マクロフォルダ」のサブフォルダ「jsmode_modules\outputpane\outputpane.js」というファイル位置となります。<br>
+    (jsmode_modulesフォルダ、その下のoutputpaneフォルダは新規作成する)<br>
+    <mark>outputpane.jsとoutputpane.dll</mark>を同じフォルダに配置してください。</p>
+    <p>
+        実際にはここ以外に配置してもかまいません。<br>
+        その際は、適宜以降のページで出てくるexecjsの引数を変更してください。</p>
+    <fieldset class="code">
+        <legend>location.mac</legend>
+        <pre class="brush:hmmacro;">$location = macrodir + @"\jsmode_modules\outputpane\outputpane.js";
+message($location);
+</pre>
+    </fieldset>
+</div>
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>execjs でも require でもどちらでも利用可能</h3>
+    <fieldset class="code">
+        <legend>execjsで使う利用方法</legend>
+        <pre class="brush:js;">execjs macrodir + @"\jsmode_modules\outputpane\outputpane.js";
+js {
+
+    var text = "あいうえお";
+
+    OutputPane.outputline(text);
+
+
+    var xx = 3333;
+
+    OutputPane.outputline(xx);
+
+    var obj = {
+        a:3,
+        b:"abc",
+        e : {
+            f : 3,
+            g : function(a) { return 3; }
+        }
+    };
+
+    OutputPane.outputline(obj);
+}
+        </pre>
+    </fieldset>
+
+    <fieldset class="code">
+        <legend>requireで使う利用方法 (<a href="?page=nobu_tool_hm_jsmode_require">require</a>)</legend>
+        <pre class="brush:js;">execjs macrodir + @"\jsmode_modules\require.js";
+js {
+
+    var OutputPane = require("outputpane");
+
+    var text = "あいうえお";
+
+    OutputPane.outputline(text);
+
+
+    var xx = 3333;
+
+    OutputPane.outputline(xx);
+
+    var obj = {
+        a:3,
+        b:"abc",
+        e : {
+            f : 3,
+            g : function(a) { return 3; }
+        }
+    };
+
+    OutputPane.outputline(obj);
+
+}
+        </pre>
+    </fieldset>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>リポジトリ</h3>
+    <p><a href="https://github.com/komiyamma/hm_jsmode_outputpane">Github</a>にソースがあります。</p>
+</div>

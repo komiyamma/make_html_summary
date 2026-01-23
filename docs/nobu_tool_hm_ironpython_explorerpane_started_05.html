@@ -1,0 +1,26 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>ファイルマネージャ枠のプロジェクトのファイル名を取得</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>ファイルマネージャ枠のプロジェクトのファイル名を取得します。</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+  <h3>
+    ファイルマネージャ枠のプロジェクトのファイル名を取得
+  </h3>
+  <p>非同期のメソッド中も含め、常時取得することが出来ます。</p>
+  <blockquote>project_filepath = hm.ExplorerPane.GetProject()</blockquote>
+  <ul class="pointlist">
+      <li>
+          <h4>Python側のソース</h4>
+          <fieldset class="code">
+            <legend>コード</legend>
+            <pre class="brush:js">...
+  project_filepath = hm.ExplorerPane.GetProject();
+  hm.OutputPane.Output(project_filepath)
+</pre>
+          </fieldset>
+      </li>
+  </ul>
+</div>

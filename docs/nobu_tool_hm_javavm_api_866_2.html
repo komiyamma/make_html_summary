@@ -1,0 +1,140 @@
+<div class="content-box mb-3 content-lighten">
+<h2><i class="fa fa-book fa-fw"></i>hmJavaVMが持つエディタ編集領域の関数</h2>
+<p>
+    各メソッドの細かな「型情報」などは、Eclipse等で使用する際に自動的に表示されますので、<br>
+    ここでは割愛します。
+</p>
+</div>
+<div class="content-box mb-3 content-lighten">
+        <h3>編集中エディタに対する関数</h3>
+        <p>現在秀丸エディタで開いているテキストに対して、以下の関数を利用することが出来ます。</p>
+        <ul class="pointlist">
+            <li>
+                <h4>ファイル名</h4>
+                <ul class="arrowlist">
+                    <li>
+                        <h5>Hm.Edit.getFile()</h5>
+                        <p>現在編集中の秀丸エディタのファイル名を基に 「new java.io.File()」オブジェクトを得る<br>
+                        </p>
+                        <div class="code">
+                            <pre class="brush:java">import java.io.File;
+import hidemaru.*;
+
+public class MyClass2 {
+
+    public static long Test() {
+        File f = Hm.Edit.getFile();
+        if (f != null) {
+            Hm.debugInfo(f.getAbsolutePath());
+        } else {
+            Hm.debugInfo("無い");
+        }
+
+        return 1;
+    }
+}
+</pre>
+                        </div>
+                </li></ul>
+                <h4>テキスト全体</h4>
+                <ul class="arrowlist">
+                    <li>
+                        <h5>Hm.Edit.getTotalText()</h5>
+                        <p>現在編集中の秀丸エディタのテキスト全体を得る</p>
+                    </li><li>
+                        <h5>Hm.Edit.setTotalText( オブジェクト )</h5>
+                        <p>現在編集中の秀丸エディタのテキスト全体を、対象の引数を文字列化したものへと変更する</p>
+                </li></ul>
+                <div class="code">
+                    <pre class="brush:java">import hidemaru.*;
+
+public class MyClass2 {
+
+    // この変数はマクロが終了しても、残る
+    static int staticCounter = 0;
+
+    public static long begin() {
+        // 秀丸エディタ上の編集中テキストの現在の内容すべて
+        String text = Hm.Edit.getTotalText();
+
+        Hm.Edit.setTotalText("編集中テキストの内容をこの文字列に変更");
+
+        return 1;
+    }
+}
+</pre>
+                </div>
+            </li><li>
+                <h4>選択中のテキスト</h4>
+                <p>(単純選択のみが対象となります。ボックス選択や複数選択は対象にはなりません)</p>
+                <ul class="arrowlist">
+                    <li>
+                        <h5>Hm.Edit.getSelectedText()</h5>
+                        <p>現在編集中の秀丸エディタの「選択している」テキストを得る。</p>
+                    </li><li>
+                        <h5>Hm.Edit.setSelectedText( オブジェクト )</h5>
+                        <p>現在編集中の秀丸エディタの「選択している」テキストを、対象の引数を文字列化したものへと変更する</p>
+                </li></ul>
+            </li><li>
+                <h4>カーソルがある行のテキスト</h4>
+                <ul class="arrowlist">
+                    <li>
+                        <h5>Hm.Edit.getLineText()</h5>
+                        <p>現在編集中の秀丸エディタの「カーソルがある行」のテキストを得る。</p>
+                    </li><li>
+                        <h5>Hm.Edit.setLineText( オブジェクト )</h5>
+                        <p>現在編集中の秀丸エディタの「カーソルがある行」のテキストを、対象の引数を文字列化したものへと変更する</p>
+                </li></ul>
+            </li><li>
+                <h4>カーソルの位置</h4>
+                <ul class="arrowlist">
+                    <li>
+                        <h5>Hm.Edit.getCursorPos().getLineNo()</h5>
+                        <p>
+                            現在選択中の秀丸エディタのカーソル位置の行番号を得る。<br>
+                            秀丸マクロのlinenoと同じ値。
+                        </p>
+                    </li><li>
+                        <h5>Hm.Edit.getCursorPos().getColumn()</h5>
+                        <p>
+                            現在選択中の秀丸エディタのカーソル位置のカラム値を得る。<br>
+                            秀丸マクロのcolumnと同じ値。
+                        </p>
+                </li></ul>
+                <div class="code">
+                    <pre class="brush:java">int lineno = Hm.Edit.getCursorPos().getLineNo();
+int column = Hm.Edit.getCursorPos().getColumn();
+
+// これらの値は、マクロシンボル経由からでも取得可能。例えば以下のような記述方法
+int lineno2 = (int)Hm.Macro.getVar("lineno");
+int column2 = (int)Hm.Macro.getVar("column");
+</pre>
+                </div>
+            </li><li>
+                <h4>マウスの位置のカーソルの位置 (秀丸エディタ V8.73以上)</h4>
+                <ul class="arrowlist">
+                    <li>
+                        <h5>Hm.Edit.getMousePos().getLineNo()</h5>
+                        <p>
+                            現在選択中の秀丸エディタのマウスの位置をカーソル位置にみたてた行番号を得る。<br>
+                            換算出来ない場合は-1
+                        </p>
+                    </li><li>
+                        <h5>Hm.Edit.getMousePos().getColumn()</h5>
+                        <p>
+                            現在選択中の秀丸エディタのマウスの位置をカーソル位置にみたてたカラム値を得る。<br>
+                            換算出来ない場合は-1
+                        </p>
+                    </li><li>
+                        <h5>Hm.Edit.getMousePos().getX()</h5>
+                        <p>
+                            マウスのx座標。(win32 apiのGetCursurPosと同じ)
+                        </p>
+                    </li><li>
+                        <h5>Hm.Edit.getMousePos().getY()</h5>
+                        <p>
+                            マウスのy座標。(win32 apiのGetCursurPosと同じ)
+                        </p>
+		</li></ul>
+	</li></ul>
+</div>

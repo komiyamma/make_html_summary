@@ -1,0 +1,28 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>ファイルマネージャ枠の現在のフォルダのパスを取得(秀丸エディタ 8.85以上)</h2>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>フォルダツリーとファイル一覧の現在のフォルダのパスを取得します。</p>
+    <p><mark>秀丸本体のカレントフォルダとは異なる</mark>ので注意してください。<br>
+      あくまでもファイルマネージャ枠のカレントフォルダです。</p>
+  </div>
+<div class="content-box mb-3 content-lighten">
+  <h3>
+    フォルダツリーとファイル一覧の現在のフォルダのパスを取得
+  </h3>
+  <p>非同期のメソッド中も含め、常時取得することが出来ます。</p>
+  <blockquote>string currentdir = hm.ExplorerPane.GetCurrentDir()</blockquote>
+  <ul class="pointlist">
+      <li>
+          <h4>Lua側のソース</h4>
+          <fieldset class="code">
+            <legend>コード</legend>
+            <pre class="brush:lua">...
+  local currentdir = hm.ExplorerPane.GetCurrentDir();
+  hm.OutputPane.Output(currentdir)
+</pre>
+          </fieldset>
+      </li>
+  </ul>
+</div>
