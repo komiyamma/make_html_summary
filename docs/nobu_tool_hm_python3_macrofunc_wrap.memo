@@ -1,1 +1,0 @@
-Python関数内で秀丸マクロをラップする実装の基本。引数や戻り値をhm.Macro.Varで受け渡し、hm.Macro.Function等を利用する効率的な手法を解説。

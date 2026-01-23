@@ -1,1 +1,0 @@
-HmPerplexityWebを外部マクロから呼び出す手法を解説。onRequestQuestionText関数を定義して質問内容を制御する方法や、引数渡しの実装例を紹介。
