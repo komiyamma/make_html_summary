@@ -1,0 +1,88 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>秀丸の「関数」や「文」をラップしてみよう</h2>
+    <p>秀丸マクロの「関数」や「文」をpythonの関数として使えるようにラップしてみましょう。<br>
+        秀丸マクロでは「関数」とは「引数にカッコが付いており、値が返るもの」、
+        「文」とは「引数にはカッコが付かず、値が返らないもの」です。
+    </p>
+    <p>python上では、区別は特になく、「値が返る関数」と「値が返らない関数」程度の違いととらえればよいでしょう。
+    </p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>wcsmidstr( s1, n1, n2 ) 関数</h2>
+    <p>https://help.maruo.co.jp/hidemac/html/070_Function_wcsmidstr.html<br>の関数をラップしてみましょう。</p>
+    <p>
+        実際には、Pythonの方がはるかに豊富な文字列系機能を備えているため、このような関数をPythonでラップする
+        必要はありませんが、<br>
+        今回は練習だと思ってください。
+    </p>
+
+    <fieldset class="code">
+        <legend>mytest.py</legend>
+        <pre class="brush:python">from hmPython import hm
+
+def midstr(s1: str, n1: int, n2: int)-&gt; str:
+ 
+    # 「Pythonの引数」を「秀丸マクロの変数」へと渡す
+    hm.Macro.Var['$_TMP_S1'] = s1; # 文字列変数へ
+    hm.Macro.Var['#_TMP_N1'] = n1; # 数値変数へ
+    hm.Macro.Var['#_TMP_N2'] = n2; # 数値変数へ
+ 
+    # 秀丸マクロとして該当の引数を利用して
+    ret = hm.Macro.Eval(r'''
+        $_TMP_MIDSTR_RESULT = wcsmidstr($_TMP_S1, #_TMP_N1, #_TMP_N2);
+    '''
+    )
+ 
+    # 実行に成功した時は、秀丸マクロの結果変数を返す
+    if ret.Result &gt;= 1:
+        return hm.Macro.Var['$_TMP_MIDSTR_RESULT']
+ 
+    # 失敗した時は悩ましいが今回は簡略化して空文字を返す。例外を返してもいいかもしれない。
+    else:
+        return ""
+ 
+# 対象の文字列の1番目から２文字分
+aaa = midstr("あいうえお", 1, 2);
+hm.OutputPane.Output(aaa);
+</pre>
+    </fieldset>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>引数をVarで設定し、関数や文を実行し、返り値をVarで取得する</h2>
+    <p>上の例のように、引数をVarで渡し、関数や文を実行し、返り値をVarでもらう。<br>
+        これがラッピング方法の大原則です。<br>
+    </p>
+    <p><span class="negative">文字列の引数の中身を、直接 doEvalのヒアドキュメント内で文字列として連結するのは避けましょう。</span><br>
+        「"」が文字列中に含まれていたらどうなるなどの悩ましい問題が出てくるためです。</p>
+    <p>そのような問題が発生しない、hm.Macro.Var["xxx"] = yyy による変数の伝搬を構築の基本としましょう。</p>
+    <p>
+        以上を理解していれば、ラッピングの実装を誤ることはないでしょう。<br>
+    </p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>実践では</h2>
+    <p>実践ではほとんどのシーンでは以下のように<br>
+        hm.Macro.Function や hm.Macro.Statement を使いラップすればよいでしょう。
+        <br>
+        あるいは、ラップすら必要ではないかもしれません。
+    </p>
+
+    <fieldset class="code">
+        <legend>mytest.py</legend>
+        <pre class="brush:python">from hmPython import hm
+
+def midstr(s1: str, n1: int, n2: int)-&gt; str:
+  
+    # 秀丸マクロとして該当の引数を利用して
+    ret =  hm.Macro.Function.wcsmidstr(s1, n1, n2)
+    return ret.Result
+  
+# 対象の文字列の1番目から２文字分
+aaa = midstr("あいうえお", 1, 2);
+hm.OutputPane.Output(aaa);
+</pre>
+    </fieldset>
+</div>

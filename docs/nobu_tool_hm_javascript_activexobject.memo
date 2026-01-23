@@ -1,1 +1,0 @@
-hmJS環境において、WScript.EchoやActiveXObjectといった従来のJScript(WSH)特有の記述をエミュレートし、既存資産を活用する手法の解説です。

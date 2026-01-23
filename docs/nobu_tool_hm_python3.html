@@ -1,0 +1,309 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-python fa-fw"></i>hmPython3 (秀丸マクロ用 スクリプト via Python)</h2>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>概要</h3>
+    <p>
+        秀丸マクロで「<span class="positive">Pythonを秀丸マクロとしてシームレスに近い形で利用する</span>」ためのライブラリとなります。<br>
+    </p>
+
+    <p>
+        秀丸のインプロセスで動作するため、秀丸の「組み込み言語」として動作します。<br></p>
+    <p>
+        このため、hmPython3では、Pythonと秀丸マクロとの「値のやりとり」や、<br>
+        「Pythonの中で秀丸マクロを実行」や「秀丸マクロの中でPythonを実行」をすることが、
+        とても簡単になっています。
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ダウンロード</h3>
+    <div class="content-box">
+        <div class="row">
+            <div class="card mb-3 ms-3" style="max-width: 30rem;">
+                <!-- カード上部にレイアウトされる画像：card-img-top -->
+                <div class="text-center mt-3">
+                    <img src="./other_soft/hm_python3/cnt_hm_python_mini.png" attr="noedge">
+                </div>
+                <!-- カード本文：card-body -->
+                <div class="card-body text-center">
+                    <div class="row">
+                        <div class="col-12"><small>更新日 %(year)04d/%(mon)02d/%(mday)02d</small></div>
+                    </div>
+                    <a href="%(file)s" class="btn btn-primary"><i class="fa fa-download fa-fw"></i>hmPython3 v3.131<br><small>for <span class="badge badge-light">秀丸エディタ 32bit版</span></small></a>
+                </div>
+            </div>
+            <div class="card mb-3 ms-3" style="max-width: 30rem;">
+                <!-- カード上部にレイアウトされる画像：card-img-top -->
+                <div class="text-center mt-3">
+                    <img src="./other_soft/hm_python3/cnt_hm_python_mini.png" attr="noedge">
+                </div>
+                <!-- カード本文：card-body -->
+                <div class="card-body text-center">
+                    <div class="row">
+                        <div class="col-12"><small>更新日 %(year)04d/%(mon)02d/%(mday)02d</small></div>
+                    </div>
+                    <a href="./other_soft/hm_python3/hmPython3_setup_x64.msi" class="btn btn-primary"><i class="fa fa-download fa-fw"></i>hmPython3 v3.131<br><small>for <span class="badge badge-light">秀丸エディタ 64bit版</span></small></a>
+                </div>
+            </div>
+        </div>
+        <fieldset class="alert">
+            <legend><i class="fa fa-windows fa-fw"></i>Windowsのbit数ではなく、<i class="fa fa-hidemaru fa-fw"></i>秀丸のビット数</legend> Windows
+            OSが64bit版か32bit版かは関係ありません。秀丸エディタが32bit版か64bit版かでダウンロード対象を選択してください。<br>
+        </fieldset>
+
+    </div>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>動作環境</h3>
+    <ul class="pointlist">
+        <li>
+            <h4>秀丸</h4>
+            <p>秀丸エディタ ver8.73以上<br>
+                <mark>秀丸エディタ 8.98以上を強く推奨</mark>。<br>
+                新しいバージョンであるほど多くの機能が使えます。
+            </p>
+        </li>
+        <li>
+            <h4>備考</h4>
+            <p>あなたのPCにすでにPythonがインストールされていたとしても、<br>
+                そのPythonとは一切干渉しません。<br>
+                又、既存のPython環境の妨げになるようなこともありません。</p>
+        </li>
+    </ul>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>インストール</h3>
+    <ul>
+        <li>hmPython3_setup_x86.msi(or x64.msi)をダウンロードする。
+        </li>
+        <li>
+            ダウンロードした hmPython3_setup_x86.msi(or x64.msi) を実行。<br>
+            <mark>
+                インストール先は、「<span class="negative">必ず秀丸があるフォルダ(hidemaru.exeがあるフォルダ)</span>と同じフォルダにする必要があります。<br>
+                サブフォルダや別フォルダでは動作しません。
+            </mark>
+        </li>
+        <li>
+            インストールすると、<span class="positive">
+                秀丸直下に「hmPython3.dll」「hmPython.py」「python39.dll」がコピーされます。<br>
+                又、「HmPython3というサブフォルダ」が出来上がり、<br>
+                その中にpythonインタプリタが「フルライブラリ」込みでまるまる配置
+            </span>されます。
+        </li>
+    </ul>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ソース例</h3>
+    <ul>
+        <li>(DoString関数の中身の記述は)Pythonで動作するソースは原則的には動作します。<br>
+        </li>
+        <li>Python内から秀丸マクロが実行可能です。
+        </li>
+        <li>Pythonと秀丸マクロとの変数のやり取りも、Pythonで記述します。
+        </li>
+    </ul>
+    <ul class="pointlist">
+        <li>
+            <h4>.mac１つのファイルに埋め込んだ場合</h4>
+            <p>
+                HTMLにJavaScriptを埋め込むような感覚で、秀丸マクロにPythonを文字列として埋め込むことが出来ます。<br>
+                複数個所に埋め込んでも、記述の内容は持続性を持っています。<br>
+                又、HTMLに対するJavaScript同様に、中に埋め込むのではなく、別ファイルとして記述してもかまいません。<br>
+            </p>
+
+            <fieldset class="code">
+                <legend>mytest.mac</legend>
+                <pre class="brush:hmmacro">#DLL = loaddll( hidemarudir + @"\hmPython3" );
+
+#r = dllfuncw(#DLL, "DoString", R"PY(
+from hmPython import hm
+ 
+import random
+r = random.random()
+
+ret = [ x*2 for x in range(1, 10) ]
+hm.debuginfo( ret )
+
+# 秀丸マクロ変数の「date」という定義済みの値を使う
+hm.debuginfo( hm.Macro.Var["date"] )
+
+hm.Macro.Var["$mes"] = "秀丸のマクロの変数「$mes」へと値を代入";
+
+# Python側から秀丸マクロを実行する
+hm.Macro.Eval(r'''
+    message $mes;
+''')
+
+)PY"
+);
+
+freedll(#DLL);
+</pre>
+            </fieldset>
+        </li>
+        <li>
+            <h4>.macと.pyの２つのファイルに分けた場合</h4>
+            <p>
+                特に支障がなければ、マクロとは別ファイルに記述するのを推奨します。<br>
+                エラーの行やファイルの位置がわかりやすくなります。
+            </p>
+            <fieldset class="code">
+                <legend>mytest.mac</legend>
+                <pre class="brush:hmmacro">#DLL = loaddll( hidemarudir + @"\hmPython3" );
+#r = dllfuncw(#DLL, "DoString", "import mytest");
+freedll(#DLL);
+</pre>
+            </fieldset>
+
+            <fieldset class="code">
+                <legend>mytest.py</legend>
+                <pre class="brush:python">from hmPython import hm
+ 
+import random
+r = random.random()
+
+ret = [ x*2 for x in range(1, 10) ]
+hm.debuginfo( ret )
+
+# 秀丸マクロ変数の「date」という定義済みの値を使う
+hm.debuginfo( hm.Macro.Var["date"] )
+
+hm.Macro.Var["$mes"] = "秀丸のマクロの変数「$mes」へと値を代入";
+
+# Python側から秀丸マクロを実行する
+hm.Macro.Eval(r'''
+    message $mes;
+''')
+</pre>
+            </fieldset>
+        </li>
+    </ul>
+</div>
+
+
+<div class="content-box mb-3 content-lighten">
+    <h3>from hmPython import *</h3>
+    <blockquote>from hmPython import hm</blockquote>
+    <p>ではなく、</p>
+    <blockquote>from hmPython import *</blockquote>
+    <p>後者を記述すると、秀丸エディタのマクロの関数・文・キーのほとんどが、pythonの関数としてインポートされます</p>
+    <fieldset class="code">
+        <legend>mytest.mac</legend>
+        <pre class="brush:hmmacro">#DLL = loaddll( hidemarudir + @"\hmPython3" );
+
+#r = dllfuncw(#DLL, "DoString", R"PY(
+from hmPython import *
+
+test = "あいうえお\r\n";
+hm.OutputPane.Output(test);
+message(hm.version)
+
+pos_lineno = lineno()
+pos_column = column()
+
+hm.OutputPane.Output([pos_lineno, pos_column])
+
+selected_menu = menu("あいうえお", "かきくけこ")
+hm.OutputPane.Output(str(selected_menu) + "番目を選択しました")
+
+)PY"
+);
+
+freedll(#DLL);
+</pre>
+    </fieldset>
+
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>秀丸エディタ 9.19以降だと...</h3>
+    <p>以下のように、"""""を使ってソースを挟むことで、少し見やすくすることも出来ます。</p>
+    <fieldset class="code">
+        <legend>mytest.mac</legend>
+        <pre class="brush:hmmacro">#DLL = loaddll( hidemarudir + @"\hmPython3" );
+
+#r = dllfuncw(#DLL, "DoString",
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+from hmPython import *
+
+test = "あいうえお\r\n";
+hm.OutputPane.Output(test);
+message(hm.version)
+
+pos_lineno = lineno()
+pos_column = column()
+
+hm.OutputPane.Output([pos_lineno, pos_column])
+
+selected_menu = menu("あいうえお", "かきくけこ")
+hm.OutputPane.Output(str(selected_menu) + "番目を選択しました")
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+);
+
+freedll(#DLL);
+</pre>
+    </fieldset>
+
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>特徴</h3>
+    <ul class="pointlist">
+        <li>
+            <h4>インプロセスで動作する!!</h4>
+            <p>
+                <span class="negative">これまで秀丸マクロライブラリなどに、よくあがっていたPythonが実行可能と称していたマクロ</span>は、<br>
+                「別途インタプリタが<span class="negative">別プロセス</span>として実行され、その実行結果を表示します」<br>
+                といったものが大半でした。<br>
+                (例えば、別途Pythonインタプリタが入っていれば、それを別プロセスとして呼び出し、解釈し、結果をアウトプット枠に表示します、など)
+            </p>
+            <p>
+                <span class="positive">しかし、このhmPython3は違います!!</span><br>
+                「秀丸マクロと同じプロセス空間」で動作し、秀丸のマクロ変数とも自由にやり取り出来ますので、ガッチリ秀丸と完全連携しています。<br>
+            </p>
+        </li>
+    </ul>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>秀丸エディタ ストアアプリ版について</h3>
+    <p>
+        hmPython3はストアアプリ版には本来対応していませんが、<br>
+        特別に設定をすれば、利用する方法を確保しています。<br>
+        詳細は左メニューの<a href="?page=nobu_tool_hm_python3_hmstoreapp">ストアアプリ版での利用</a>などを参照してください。
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>hmPython3とは別にhmPyもある</h3>
+    <p>
+        このhmPythonとは別に、「.NET」が利用可能な「IronPython」で記述する「<a href="?page=nobu_tool_hm_ironpython">hmPy</a>」もあります、<br>
+        既存資産やライブラリに関する知識、制作目的に応じて、選択してください。<br>
+        又、hmPython3とhmPyを１つのマクロで同時に利用することも可能です。
+    </p>
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>ライセンス</h3>
+    <ul class="pointlist">
+        <li>
+            <h4>hmPython3</h4>
+            <p>
+                全て Apache License 2.0となります。<br>
+            </p>
+            <h4>ソースの場所</h4>
+            <ul>
+                <li>
+                    <a href="https://github.com/komiyamma/hm_python3">Github</a>にソースがあります。<br>
+                    コンパイルの詳細は左メニューより「他のバージョンのPythonを使えるようにする」を参照してください。<br>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <h4>Python一式</h4>
+            <p>
+                原則的には Python Software Foundation ライセンスとなります。<br>
+                詳細は、インストールした際に含まれる「LICENSE.txt」を確認してください。
+            </p>
+        </li>
+    </ul>
+</div>

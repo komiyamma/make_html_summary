@@ -1,0 +1,108 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>IIS と PHP</h2>
+    <p>この項目は秀丸とは直接関係がありませんが、<br>
+        PHPの周辺知識の一貫として、Azureクラウドではなく<br>
+        ローカルPCやVPSといった、比較的旧来の手法の紹介となります。<br>
+        <br>
+        <a href="?page=nobu_tool_hm_php_azure_vscode">前項ではAzure</a>について解説しました。<br>
+        将来の方向性を考慮すると、Azureをオススメしますが、<br>
+    別の手段としてはIISによる方法もあります。</p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>IISの導入</h3>
+    <p><a href="?page=nobu_tool_hm_php_iis_initialize_on_win10">次項</a>にて解説しています。</p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>IISで「PHP」を使えるようにする</h3>
+    <p>Windowsのサーバーマネージャの役割と機能の追加より</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_initialize_05.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">サーバーマネージャから進めていく</figcaption>
+    </figure>
+    <p>IISの中のCGIの項目にチェックを入れるようにしましょう。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_initialize_06.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">CGIの項目にチェックを入れる</figcaption>
+    </figure>
+    <p>こうすることで、IIS内の「ハンドラモジュール」として「FastCGIModule」を選択できるようになります。</p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>PHPのダウンロード</h3>
+    <p><a href="https://windows.php.net/download/">PHP for Windowsのダウンロード</a>より、「x64 Non Thread Safe」版をダウンロードしましょう。</p>
+    <p>Apacheではなく、IISで利用するため、Non Thread Safe版となります。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_01.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">最新版の「x64 Non Thread Safe」</figcaption>
+    </figure>
+    <p>そして、zipを解答し、「C:\usr\php」フォルダなど、お好みの場所に展開してください。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_02.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">使いやすい場所に</figcaption>
+    </figure>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>Visual Studio C++ 2015-2022 Runtime</h3>
+    <p><a href="https://docs.microsoft.com/ja-JP/cpp/windows/latest-supported-vc-redist?view=msvc-170">こちらのページ</a>よりVC++
+        2015-2022ラインタイムをインストールしましょう。</p>
+        <figure class="figure">
+            <img src="./other_soft/hm_php/page_vps_rental_02.png" class="img-fluid content-img img-thumbnail">
+            <figcaption class="figure-caption text-right">vc_redist.x86.exe / vc_redist.x64.exe</figcaption>
+        </figure>
+    <p>各種ネイティブプログラムで必要となるシーンが多いため、先にインストールしておきましょう。
+</p></div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>IISでPHPをFastCGIとして登録</h3>
+    <p>IISマネージャを起動し、ハンドラーマッピングから設定しましょう。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_03.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">ハンドラーマッピング</figcaption>
+    </figure>
+    <p>右メニューより「モジュールマップの追加」を選びます。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_04.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">モジュールマップの追加</figcaption>
+    </figure>
+    <p>「*.php」として以下のように設定しましょう。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_05.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">*.phpに対して設定</figcaption>
+    </figure>
+    <p>「要求の制限」として以下のように設定しましょう。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_06.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">要求の制限</figcaption>
+    </figure>
+    <p>以上で、phpが使えるようになりました。</p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>規定のドキュメントにindex.phpを追加</h3>
+    <p>index.php などを増やしましょう。</p>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_07.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">規定のドキュメント</figcaption>
+    </figure>
+    <figure class="figure">
+        <img src="./other_soft/hm_php/page_iis_php_08.png" class="img-fluid content-img img-thumbnail">
+        <figcaption class="figure-caption text-right">規定のドキュメント</figcaption>
+    </figure>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>PHP.iniを編集する</h3>
+    <p>「php.ini-development.ini」をコピーして、「PHP.ini」を作成、編集しましょう。<br>
+    </p>
+    <ul>
+        <li>error_reporting = E_ERROR</li>
+        <li>zend.multibyte</li>
+        <li>extension_dir = "ext"</li>
+        <li>extension=mbstring</li>
+    </ul>
+    <p>あたりは以上のように「;」のコメントアウトを外して<mark>有効化</mark>したり、<br>
+        もしくはデフォルトを書き換えする必要があるでしょう。</p>
+</div>

@@ -1,0 +1,250 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-python fa-fw"></i>hmPython 他の秀丸用言語シリーズと混ぜる</h2>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>hmPython3とhmPyの連携</h3>
+    <p>当サイトのhm**の言語シリーズは、１つのマクロで１つしか使えないわけではなく、混ぜて利用が可能となっています。</p>
+    <p>例えば、「ネイティブのPython」と「IronPython」との「(アウトプロセスではなく)インプロセス」での連携は、<br>
+        本来ですと、非常に面倒臭いことになるはずなのですが、<br>
+        hm**言語シリーズでは、恐ろしいほど簡単であるのみならず、<br>
+        その記述方法も言語を跨って、統一されています。</p>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>hmPython3とjsmodeとの連携をやってみる</h3>
+    <p>以下では、
+    </p><ul>
+        <li>ネイティブの組み込みPythonエンジンとなる「hmPython3」
+        </li><li>秀丸に最初から搭載されているJavaScriptエンジンの「jsmode」
+    </li></ul>
+    <p>とを、インプロセスで処理をまぜこぜにしています。</p>
+
+    <p>秀丸マクロの変数環境空間を、<br>
+        いわば「言語同士をインプロセスで繋げるバッファー」のように見立てて<br>
+        変数の値を、手軽に伝達しあえるのがわかるかと思います。</p>
+    <div class="code">
+        <pre class="brush:hmmacro">#PY = loaddll( hidemarudir + @"\hmPython3.dll" );
+if ( !#PY ) { message "hmPython3.dllが読み込めない"; }
+ 
+#r = dllfuncw( #PY, "DoString", 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+from hmPython import hm
+import json
+
+aaa = 1000
+bbb = "あいうえお"
+ 
+hm.Macro.Var['#aaa'] = aaa # 秀丸マクロに数値として伝達
+hm.Macro.Var['$bbb'] = bbb # 秀丸マクロに文字列として伝達
+
+data = {
+    "name": "Alice",
+    "age": 30,
+    "city": "Tokyo"
+}
+
+# JSON形式の文字列に変換する
+hm.Macro.Var['$json_str'] = json.dumps(data)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+);
+
+freedll(#PY);
+
+
+js {
+    var jaaa = getVar("#aaa");
+    var jbbb = getVar("$bbb");
+    debuginfo(2);
+    console.log(jaaa);
+    console.log(jbbb);
+
+    var json_str = getVar("$json_str");
+    console.log(json_str);
+}	
+</pre>
+    </div>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>hmPython3とhmV8との連携をやってみる</h3>
+    <p>以下では、
+    </p><ul>
+        <li>ネイティブの組み込みPythonエンジンとなる「hmPython3」
+        </li><li>ネイティブなECMAScriptエンジンにマネージドを扱える仕組みを加えた「hmV8」
+    </li></ul>
+    <p>とを、インプロセスで処理をまぜこぜにしています。</p>
+
+    <p>秀丸マクロの変数環境空間を、<br>
+        いわば「言語同士をインプロセスで繋げるバッファー」のように見立てて<br>
+        変数の値を、手軽に伝達しあえるのがわかるかと思います。</p>
+    <div class="code">
+        <pre class="brush:hmmacro">//------------------------------------------------------
+// Python部分
+//------------------------------------------------------
+#PY = loaddll( hidemarudir + @"\hmPython3.dll" );
+
+#_ = dllfuncw( #PY, "DoString", R"PY(
+
+from hmPython import *
+
+aaa = 1000
+bbb = "あいうえお"
+
+hm.Macro.Var['#aaa'] = aaa # 秀丸マクロに数値として伝達
+hm.Macro.Var['$bbb'] = bbb # 秀丸マクロに文字列として伝達
+
+
+)PY"
+);
+
+//------------------------------------------------------
+// ここではfreedllせずに継続しておいて、最後にfreedllしている
+// freedll( #PY );
+
+
+//------------------------------------------------------
+// ECMAScript6のV8エンジン(.NET有り)の部分
+//------------------------------------------------------
+#ES = loaddll( hidemarudir + @"\hmV8.dll" );
+
+#_ = dllfuncw( #ES, "DoString", R"ES(
+
+let aaa = hm.Macro.Var['#aaa'] // 秀丸マクロから受信
+let bbb = hm.Macro.Var['$bbb'] // 秀丸マクロから受信
+
+let lib = host.lib("System.Windows.Forms");
+let Forms = lib.System.Windows.Forms
+
+Forms.MessageBox.Show( aaa.toString(), bbb, Forms.MessageBoxButtons.YesNoCancel, Forms.MessageBoxIcon.Information );
+
+
+hm.Macro.Var['#aaa'] = aaa + 111;
+
+)ES"
+);
+
+freedll( #ES );
+
+
+//------------------------------------------------------
+// また、Pythonへと戻ってくる
+// loaddllせずに、そのまま利用するので、前のPythonの続き扱いとなる
+// ちゃんとhmV8が行った値の変更も反映されている。
+//------------------------------------------------------
+#_ = dllfuncw( #PY, "DoString", R"PY(
+
+from hmPython import *
+
+ccc = hm.Macro.Var['#aaa']  # 秀丸マクロから受信
+
+hm.debuginfo( aaa )
+hm.debuginfo( ccc )
+
+)PY"
+);
+
+//------------------------------------------------------
+// ここで freedll
+freedll( #PY );
+
+</pre>
+    </div>
+
+
+</div>
+<div class="content-box mb-3 content-lighten">
+    <h3>hmPython3とhmPyとの連携をやってみる</h3>
+    <p>hmPythonは、いわゆる「最も普通のPython」ですので、<br>
+        非常に多くの外部ライブラリを使うことが出来ます。</p>
+    <p>但し、この通常のPythonはあまりGUIが得意ではありません。<br>
+        少なくとも.NETのC#などと比較すると目も当てられないレベルです。</p>
+    <p>一方このようなものをフォローするものとして、IronPythonが存在します。<br>
+        IronPythonは、.NET Frameworkのほとんど全ての機能が利用可能なPythonですが、<br>
+        通常のPythonとは異なるため、外部ライブラリが対応しているものが非常に少ない、という弱点があります。</p>
+    <p>そこで、処理のコアは「hmPython3」で記述し、GUI付近だけ「hmPy」で記述する、<br>
+        という考え方は、有力なものとなります。</p>
+    <p>ちょうどC++とC#のような関係と言えるでしょう。<br>
+        先述の「hmV8」の部分を「hmPy」に置き換えてみましょう。<br></p>
+    <p>Python同士であるため、記述方法も一層一貫性がもてます。</p>
+    <div class="code">
+        <pre class="brush:hmmacro">
+
+//------------------------------------------------------
+// Python部分
+//------------------------------------------------------
+#PY = loaddll( hidemarudir + @"\hmPython3.dll" );
+
+#_ = dllfuncw( #PY, "DoString", R"PY(
+
+from hmPython import *
+
+aaa = 1000
+bbb = "あいうえお"
+
+hm.Macro.Var['#aaa'] = aaa # 秀丸マクロに数値として伝達
+hm.Macro.Var['$bbb'] = bbb # 秀丸マクロに文字列として伝達
+
+
+)PY"
+);
+
+//------------------------------------------------------
+// ここではfreedllせずに継続しておいて、最後にfreedllしている
+// freedll( #PY );
+
+
+//------------------------------------------------------
+// IronPythonの部分
+//------------------------------------------------------
+#IPY = loaddll( hidemarudir + @"\hmPy.dll" );
+
+#_ = dllfuncw( #IPY, "DoString", R"IPY(
+import clr
+import System
+
+aaa = hm.Macro.Var['#aaa'] # 秀丸マクロから受信
+bbb = hm.Macro.Var['$bbb'] # 秀丸マクロから受信
+
+clr.AddReferenceByPartialName("System.Windows.Forms")
+from System.Windows.Forms import *
+
+MessageBox.Show( str(aaa), bbb, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information );
+
+
+hm.Macro.Var['#aaa'] = aaa + 111;
+
+)IPY"
+);
+
+freedll( #IPY );
+
+
+//------------------------------------------------------
+// また、Pythonへと戻ってくる
+// loaddllせずに、そのまま利用するので、前のPythonの続き扱いとなる
+//------------------------------------------------------
+#_ = dllfuncw( #PY, "DoString", R"PY(
+
+from hmPython import *
+
+ccc = hm.Macro.Var['#aaa']  # 秀丸マクロから受信
+
+hm.debuginfo( aaa )
+hm.debuginfo( ccc )
+
+)PY"
+);
+
+//------------------------------------------------------
+// ここではfreedll
+freedll( #PY );
+
+</pre>
+    </div>
+    <p><span class="negative">ここでは紙面の都合上、全て１つのマクロファイルに埋め込んでいますが、<br>
+            通常は、Python用の.pyと、IronPython用の.pyでファイルを分け、関数を作成して、<br>
+            秀丸マクロからはそれらの関数を呼び出す、という形にするのが良いと思います。</span></p>
+
+</div>

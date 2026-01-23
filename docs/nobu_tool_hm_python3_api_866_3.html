@@ -1,0 +1,118 @@
+<div class="content-box mb-3 content-lighten">
+    <h2><i class="fa fa-book fa-fw"></i>hmPython3が秀丸マクロへアクセスする関数</h2>
+</div>
+
+<div class="content-box mb-3 content-lighten">
+    <h3>Pythonから秀丸マクロへアクセスする関数</h3>
+    <p>
+        Pythonの機能をフルに生かしつつ、秀丸マクロの機能や各種値もほぼ全て使えるところが、<br>
+        hmPython3が優れている所以です。
+    </p>
+    <ul>
+        <li>秀丸マクロをそのまま実行
+        </li>
+        <li>「秀丸マクロの変数」⇔「Pythonの変数」を相互にやり取り。
+        </li>
+    </ul>
+    <p>の２つの手段で秀丸マクロを取り扱うことが出来ます。</p>
+    <ul class="pointlist">
+        <li>
+            <h4>Pythonから秀丸マクロを実行</h4>
+            <p>
+                秀丸エディタ 8.66以降では、Hidemaru_EvalMacroという関数が秀丸本体からエキスポートされたため、<br>
+                マクロ実行中であれば、秀丸マクロ以外の場所からでもマクロを記述し、実行することが可能となりました。
+            </p>
+            <ul class="arrowlist">
+                <li>
+                    <h5>hm.Macro.Eval( ヒアドキュメント文字列)</h5>
+                    <p>引数の文字列を、「秀丸マクロ」として実行する。</p>
+                </li>
+            </ul>
+            <div class="code">
+                <pre class="brush:python">#PY = loaddll( hidemarudir + @"\hmPython3.dll" );
+
+if ( !#PY ) {
+    message("hmPython3.dllが導入されていません");
+    endmacro;
+}
+
+#_ = dllfuncw(#PY, "DoString", R"PY(
+
+from hmPython import *
+
+py_x = 100
+
+#Pythonの中で、hm.Macro.Eval関数を使って、秀丸のマクロを書くことが出来る
+hm.Macro.Eval( r'''
+  #a = 3;
+  debuginfo 1;
+  showvars;
+  message("あいうえお");
+
+  showvars;
+'''
+)
+
+)PY"
+);
+
+freedll( #PY );
+</pre>
+            </div>
+        </li>
+        <li>
+            <h4>Pythonから秀丸マクロの変数の読み書き</h4>
+            <ul class="arrowlist">
+                <li>
+                    <h5>hm.Macro.Var["変数名"]</h5>
+                    <p>対象の「秀丸マクロ」としてのシンボル名に対応する値を取得する。</p>
+                </li>
+                <li>
+                    <h5>hm.Macro.Var["変数名"] = 新たな値</h5>
+                    <p>
+                        対象の「秀丸マクロ」としてのシンボル名に、新たな値を設定する。<br>
+                        (読み取り専用の値には設定出来ません）
+                    </p>
+                </li>
+            </ul>
+            <div class="code">
+                <pre class="brush:python">#PY = loaddll( hidemarudir + @"\hmPython3.dll" );
+
+#_ = dllfuncw(  #PY, "DoString", R"PY(
+
+from hmPython import *
+
+# 秀丸マクロの「#aaa」という変数に3を設定。
+hm.Macro.Var['#aaa'] = 3;
+
+# 秀丸マクロの「$bbb」という変数に「あいうえお」を設定。
+hm.Macro.Var['$bbb'] = "あいうえお。"
+
+# 秀丸マクロとして一連の文字列を実行
+hm.Macro.Eval( r'''
+    message($bbb);
+    $$message = $bbb + $bbb;
+    message($$message);
+
+    // アウトプット枠へ出力
+    #OP = loaddll("HmOutputPane.dll");
+    #ret = dllfunc(#OP, "Output",hidemaruhandle(0), $$message);
+    freedll(#OP);
+'''
+);
+
+hm.debuginfo( hm.Macro.Var['$bbb'] );
+hm.debuginfo( hm.Macro.Var['filename'] );
+
+hmdate = hm.Macro.Var['date'];
+hm.debuginfo( hmdate );
+
+)PY"
+);
+
+freedll(  #PY );
+        </pre>
+            </div>
+        </li>
+    </ul>
+</div>
