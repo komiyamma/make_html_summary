@@ -1,0 +1,1 @@
+hmLJの基礎的なAPIを解説。DoStringやGetNumVarなど、秀丸マクロとLuaJIT間で値や命令をやり取りするための、必須となる6つの主要関数について説明。
