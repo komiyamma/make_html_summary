@@ -1,0 +1,1 @@
+hm.NETを用いて秀丸マクロの静的変数（static variable）を読み書きする方法。Hm.Macro.StaticVarのGet/Setメソッドやインデクサの利用法を解説。
